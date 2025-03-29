@@ -1,0 +1,22 @@
+{
+  "name": "royalty-backend",
+  "version": "1.0.0",
+  "description": "the backend for the royalty extension",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon -r tsconfig-paths/register src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.0",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.14",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.2"
+  }
+}
