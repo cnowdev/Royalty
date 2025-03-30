@@ -9,6 +9,14 @@ import { couponCacheStorage } from '@extension/storage';
 class API {
     private baseUrl: string = process.env.CEB_API_URL || 'http://localhost:3000';
 
+    /**
+     * Method that searches for coupons
+     * 
+     * @param query The search query for coupons. This should be the domain of the website
+     * @param sort_by The sorting method for the coupons. Can be 'newest', 'oldest', 'high_score', or 'low_score'
+     * @param limit The number of items per page
+     * @returns A list of Coupon objects
+     */
     async searchCoupons(query: string, sort_by: string = 'newest', limit: number = 10): Promise<Coupon[]> {
         let cache = await couponCacheStorage.get();
 
