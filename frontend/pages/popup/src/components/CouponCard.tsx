@@ -23,7 +23,7 @@ export const CouponCard: React.FC<CouponCardProps> = ({ coupon, isLight }) => {
   };
 
   return (
-    <div className={`border rounded-lg p-3 md:p-4 shadow-sm mb-3 transition-colors duration-200 ${ isLight ? 'bg-white border-gray-200 hover:shadow-md' : 'bg-gray-700 border-gray-600 hover:bg-gray-650'}`}>
+    <div className={`border rounded-lg p-3 md:p-4 shadow-sm mb-3 transition-colors duration-200 ${ isLight ? 'bg-white border-gray-400 hover:shadow-md' : 'bg-gray-700 border-gray-600 hover:bg-gray-650'}`}>
       <div className="flex justify-between items-start gap-2 mb-2">
         <h3 className={`font-semibold text-sm md:text-base flex-1 ${ isLight ? 'text-gray-800' : 'text-white'}`}>{coupon.title}</h3>
         <span className={`text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap ${ isLight ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-green-900 text-green-300 border border-green-700'}`}>
