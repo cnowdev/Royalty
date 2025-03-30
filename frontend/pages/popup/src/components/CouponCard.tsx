@@ -1,4 +1,4 @@
-import { CouponCardProps } from "../../../../types";
+import { CouponCardProps } from "@extension/shared";
 import { useState } from "react";
 
 export const CouponCard: React.FC<CouponCardProps> = ({ coupon, isLight }) => {

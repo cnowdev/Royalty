@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '@src/Popup.css';
 import { useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
 import { exampleThemeStorage } from '@extension/storage';
-import { Coupon, CouponCardProps } from '../../../types';
+import { Coupon } from '@extension/shared';
 import { CouponCard } from './components/CouponCard';
 import { ToggleButton } from './components/ToggleButton';
-import { getCurrentTab, getDomain} from './utils';
-
+import { getCurrentTab, getDomain } from './utils';
+import { APIClient } from '@extension/shared';
 
 
 
@@ -36,27 +36,12 @@ const Popup = () => {
         const currentURL = await getCurrentTab().then(url => getDomain(url));
         console.log(currentURL);
 
-        const params = new URLSearchParams({
-          query: currentURL,
-          sort_by: "newest",
-          limit: "10"
-        });
+        const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 'newest', 10);
+        console.log("data received:", couponResponse)
 
-        const url = `${process.env.CEB_API_URL}/coupons/search?${params.toString()}`
-
-        interface ApiResponse {
-          data: Coupon[];
-        }
-
-        const data: ApiResponse = await fetch(url, {
-          method: 'GET',
-        }).then(res => res.json());
-        console.log("Mock data received:", data);
-
-
-        if (data && data.data && data.data.length > 0) {
-           setCoupons(data.data);
-           const firstCoupon = data.data[0];
+        if (couponResponse && couponResponse.length > 0) {
+           setCoupons(couponResponse);
+           const firstCoupon = couponResponse[0];
            setMerchantName(firstCoupon.merchant_name?.replace(' Coupons', '') + ' Coupons' || 'Available Coupons');
            setMerchantUrl(firstCoupon.merchant_url || null);
         } else {
