@@ -59,7 +59,7 @@ const manifest = {
   ],
   web_accessible_resources: [
     {
-      resources: ['autoApply.js', '*.js', '*.css', '*.svg', 'icon-128.png', 'icon-34.png'],
+      resources: ['*.js', '*.css', '*.svg', 'icon-128.png', 'icon-34.png'],
       matches: ['*://*/*'],
     },
   ],

@@ -79,14 +79,56 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
                 submitSelector: "button[data-testid=promo-code-submit]",
                 successSelector: ".e8i0p5k0",
                 errorSelector: ".egb3lhk0",
-                waitMs: 500,
+                waitMs: 750,
             },
             "target.com": {
                 inputSelector: "#promoCodeEntry",
                 submitSelector: "button[data-test=apply-promo-code-button]",
                 successSelector: ".e8i0p5k0",
                 errorSelector: "#promoCodeEntry--ErrorMessage",
-                waitMs: 500,
+                waitMs: 750,
+            },
+            "costco.com": {
+                inputSelector: "#enter-promo-code-input",
+                submitSelector: "#apply-promo-code > input",
+                successSelector: ".e8i0p5k0",
+                errorSelector: "#promo-code-error > p.sr-only",
+                waitMs: 750,
+            },
+            "amazon.com": {
+                inputSelector: "#spc-gcpromoinput",
+                submitSelector: "input[aria-labelledby=gcApplyButtonId-announce]",
+                successSelector: ".e8i0p5k0",
+                errorSelector: "#addPromo_BadCode",
+                waitMs: 750,
+            },
+            "michaels.com": {
+                inputSelector: "#promoCode",
+                submitSelector: "button[formid=promo-code]",
+                successSelector: ".e8i0p5k0",
+                errorSelector: ".conpon-error-item",
+                waitMs: 750,
+            },
+            "skillshare.com": {
+                inputSelector: "input[data-testid=coupon-input]",
+                submitSelector: "button[data-testid=coupon-button]",
+                successSelector: ".sk-mt-1.sk-text-text-medium.sk-font-bold.sk-italic.sk-text-accent",
+                errorSelector: "div[data-testid=coupon-error]",
+                waitMs: 750,
+            },
+            "kohls.com": {
+                inputSelector: "input[name=promoCode]",
+                submitSelector: "button[title=Add]",
+                successSelector: ".manual-entry-success-msg",
+                errorSelector: "",
+                waitMs: 750,
+            },
+            "gap.com": {
+                inputSelector: "#promo-code-input",
+                submitSelector: "#apply-promo-code-button",
+                successSelector: ".manual-entry-success-msg",
+                errorSelector: ".text-cb-textColor-error.cb-base-note.mt-1 h-auto",
+                waitMs: 750,
             },
         };
 
@@ -110,6 +152,30 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
             if (button) {
                 button.click();
                 await delay(500);
+            }
+        }
+
+        if (domain === "michaels.com") {
+            let testinputField = document.querySelector<HTMLInputElement>(config.inputSelector);
+            if(!testinputField) {
+                const button = document.querySelector<HTMLButtonElement>(".css-1c7c9ch");
+                if (button) {
+                    button.click();
+                    await delay(500);
+                    
+                }
+            }
+        }
+
+        if (domain === "kohls.com") {
+            let testinputField = document.querySelector<HTMLInputElement>(config.inputSelector);
+            if(!testinputField) {
+                const button = document.querySelector<HTMLButtonElement>(".open-offers-block");
+                if (button) {
+                    button.click();
+                    await delay(500);
+                    
+                }
             }
         }
 
@@ -137,10 +203,10 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
             setInputValue(inputField, code);
             await delay(150);
 
-            if (!isElementUsable(submitButton)) {
-                sendResponse({ success: false, message: `Error: Submit button not usable.` });
-                return;
-            }
+            // if (!isElementUsable(submitButton)) {
+            //     sendResponse({ success: false, message: `Error: Submit button not usable.` });
+            //     return;
+            // }
 
             clickElement(submitButton);
 

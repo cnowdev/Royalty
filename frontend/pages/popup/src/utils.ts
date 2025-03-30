@@ -13,6 +13,12 @@ export const getCurrentTab = async (): Promise<string> => {
 };
 
 export const getDomain = (url: string): string => {
-    const hostname = new URL(url).hostname; // Extracts "www.target.com"
-    return hostname.replace(/^www\./, ''); // Removes "www." if it exists
+  const hostname = new URL(url).hostname;
+
+  const parts = hostname.split('.');
+  if (parts.length > 2) {
+      return parts.slice(-2).join('.');
+  }
+  
+  return hostname;
 };

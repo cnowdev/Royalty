@@ -41,8 +41,12 @@ class API {
             method: 'GET'
         }).then((res) => res.json());
 
-        if (!response || !response.data) {
+        if (!response) {
             throw new Error('Failed to fetch coupons');
+        }
+
+        if(!response.data || response.data.length === 0) {
+            throw new Error(`No coupons found for: ${query}`);
         }
 
         console.log(cache);
