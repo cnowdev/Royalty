@@ -124,8 +124,10 @@ const Popup = () => {
                       if(response.success) {
                           setApplyStatus(`Success! Applied code: ${response.appliedCode}`);
                           // Maybe refresh coupons display or indicate success visually
+                      } else if (response.message == "NO_CODES") {
+                          setApplyStatus("Tried all codes, none confirmed successful.");
                       } else {
-                          setApplyStatus("Something went wrong. Could not apply any codes.");
+                        setApplyStatus("Something went wrong. Could not apply any codes.");
                       }
                   } else {
                       setApplyStatus("Something went wrong. Could not apply any codes.");
