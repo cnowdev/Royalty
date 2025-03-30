@@ -39,6 +39,13 @@ const Popup = () => {
         const currentURL = await getCurrentTab().then(url => getDomain(url));
         console.log(currentURL);
 
+        if(currentURL.slice(-4) != ".com") {
+            console.error("Invalid domain for coupons:", currentURL);
+            setError("Invalid domain. Please try a different website.");
+            setMerchantName('No Coupons Found');
+            setIsLoading(false);
+            return;
+        }
 
         const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 'newest', 10);
         console.log("data received:", couponResponse)
