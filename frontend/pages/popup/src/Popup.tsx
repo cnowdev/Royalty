@@ -104,7 +104,7 @@ const Popup = () => {
       try {
           await chrome.scripting.executeScript({
               target: { tabId: tab.id },
-              files: ['popup/autoApply.js'], // IMPORTANT: Path to your compiled content script JS
+              files: ['/content-runtime/index.iife.js'],
           });
           console.log("Content script injected or already present.");
 
