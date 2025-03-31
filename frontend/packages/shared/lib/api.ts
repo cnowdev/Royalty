@@ -1,4 +1,4 @@
-import { Coupon } from './utils/shared-types.js'
+import { Coupon, RetailerProduct } from './utils/shared-types.js'
 import { couponCacheStorage } from '@extension/storage';
 
 /**
@@ -8,6 +8,28 @@ import { couponCacheStorage } from '@extension/storage';
  */
 class API {
     private baseUrl: string = process.env.CEB_API_URL || 'http://localhost:3000';
+
+    private async baseFetch(url: string, method: string = 'GET', body?: any): Promise<any> {
+        const options: RequestInit = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+
+        return response.json();
+    }
 
     /**
      * Method that searches for coupons
@@ -37,9 +59,7 @@ class API {
             data: Coupon[];
           }
   
-        const response: ApiResponse = await fetch(url, {
-            method: 'GET'
-        }).then((res) => res.json());
+        const response: ApiResponse = await this.baseFetch(url, 'GET');
 
         if (!response) {
             throw new Error('Failed to fetch coupons');
@@ -57,6 +77,65 @@ class API {
         couponCacheStorage.set(cache);
 
         return response.data
+    }
+
+    /**
+     * gets the retailerProduct for a given product URL.
+     * 
+     * @param productURL 
+     * @returns a list of RetailerProduct objects
+     */
+    async getRetailerProduct(productURL: string): Promise<RetailerProduct> {
+        
+        const params = new URLSearchParams({
+            productURL: productURL,
+        })
+        const url = `${this.baseUrl}/products/retailer-product?${params.toString()}`;
+        const response = await this.baseFetch(url, 'GET');
+        if (!response) {
+            throw new Error('Failed to fetch retailer product');
+        }
+        return response;
+    }
+
+    /**
+     * Gets the latest retailerProduct objects that share a similair Product ID.
+     * 
+     * @param objectID 
+     * @returns a list of RetailerProduct objects
+     */
+    async getRelatedProducts(objectID: string): Promise<RetailerProduct[]> {
+        const params = new URLSearchParams({
+            objectId: objectID
+        });
+
+        const url = `${this.baseUrl}/products/related?${params.toString()}`;
+        const response = await this.baseFetch(url, 'GET');
+        if (!response) {
+            throw new Error('Failed to fetch related products');
+        }
+        return response;
+    }
+
+    /**
+     * Gets the pricing data for a given retailerProduct retailer product id and retailer name.
+     * 
+     * @param retailerProductId
+     * @param retailerName
+     * @returns the pricing data for the given retailerProduct
+     */
+    async getRetailerProductPricingData(retailerProductId: string, retailerName: string): Promise<RetailerProduct[]> {
+        const params = new URLSearchParams({
+            retailerProductID: retailerProductId,
+            retailerName: retailerName,
+        });
+
+        const url = `${this.baseUrl}/products/retailer-product-pricing-data?${params.toString()}`;
+        const response = await this.baseFetch(url, 'GET');
+        if (!response) {
+            throw new Error('Failed to fetch retailer product pricing data');
+        }
+        return response;
     }
 }
 
