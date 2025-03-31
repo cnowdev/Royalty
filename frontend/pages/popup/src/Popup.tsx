@@ -35,14 +35,11 @@ const Popup = () => {
       setMerchantUrl(null);
       try {;
 
-        console.log("Fetching coupons...");
         const currentURL = await getCurrentTab().then(url => getDomain(url));
-        console.log("current url: "+currentURL);
 
         const validTLDs = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.co', '.us', '.uk', '.ca', '.au', '.in'];
         const hasValidTLD = validTLDs.some(tld => currentURL.endsWith(tld));
         if (!hasValidTLD) {
-            console.error("Invalid domain for coupons:", currentURL);
             setError("Invalid domain. Please try a different website.");
             setMerchantName('No Coupons Found');
             setIsLoading(false);
@@ -50,7 +47,6 @@ const Popup = () => {
         }
 
         const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 'newest', 10);
-        console.log("data received:", couponResponse)
 
         if (couponResponse && couponResponse.length > 0) {
            setCoupons(couponResponse);

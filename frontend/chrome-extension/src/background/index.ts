@@ -1,17 +1,43 @@
 import 'webextension-polyfill';
 import { exampleThemeStorage } from '@extension/storage';
+import { APIClient } from '@extension/shared';
+import { getCurrentTab, getDomain } from '../../../pages/popup/src/utils';
 
 exampleThemeStorage.get().then(theme => {
   console.log('theme', theme);
 });
 
-console.log('Background loaded');
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    (async () => {
+      console.log("Before coupon fetch");
+      const currentURL = await getCurrentTab().then(url => getDomain(url));
+      console.log("current url: " + currentURL);
+
+      const validTLDs = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.co', '.us', '.uk', '.ca', '.au', '.in'];
+      const hasValidTLD = validTLDs.some(tld => currentURL.endsWith(tld));
+      if (!hasValidTLD) {
+        console.error("Invalid domain for coupons:", currentURL);
+        return;
+      }
+
+      try {
+        let coupons = await APIClient.searchCoupons(currentURL, 'newest', 10);
+        console.log("coupons: ", coupons);
+      } catch (error) {
+        console.error("Error fetching coupons:", error);
+      }
+    })();
+  }
+});
+
+console.log('Background loaded!');
 console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'OPEN_SIDE_PANEL') {
     console.log('Opening side panel...');
-    chrome.tabs.query({ active: true, currentWindow: true, lastFocusedWindow: true}, (tabs) => {
+    chrome.tabs.query({ active: true, currentWindow: true, lastFocusedWindow: true }, (tabs) => {
       if (tabs.length > 0 && tabs[0].id !== undefined) {
         const tabId = tabs[0].id;
         chrome.sidePanel.setOptions({
@@ -35,7 +61,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
 
     return true;
-  } else{
+  } else {
     return;
   }
 });
