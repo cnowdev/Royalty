@@ -35,4 +35,5 @@ export interface RetailerProduct {
   retailerProductUrl: string;
   price: number; // Assuming Decimal is represented as a number on the frontend
   createdAt: string; // ISO string format for DateTime
+  imageUrl?: string;
 };

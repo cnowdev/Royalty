@@ -160,8 +160,11 @@ const SidePanel = () => {
           <div className="space-y-6">
             {/* Product Title and Image */}
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden border bg-white">
-              </div>
+              <img 
+                src={currentProduct.imageUrl || 'https://via.placeholder.com/150'} 
+                alt={currentProduct.name || 'Product Image'} 
+                className="w-16 h-16 object-cover rounded"
+              />
               <div>
                 <h2 className={`text-sm font-medium leading-tight ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
                   {currentProduct.name}
@@ -190,8 +193,6 @@ const SidePanel = () => {
                     key={retailer.id}
                     className={`p-3 rounded-lg border flex items-center ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}
                   >
-                    <div className="w-10 h-10 flex-shrink-0 mr-3 bg-white rounded overflow-hidden border">
-                    </div>
                     
                     <div className="flex-1 min-w-0">
                       <h4 className={`text-sm font-medium ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>

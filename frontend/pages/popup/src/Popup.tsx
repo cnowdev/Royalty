@@ -229,7 +229,7 @@ const Popup = () => {
 
      
       <footer className={`mt-4 pt-3 border-t text-xs text-center ${isLight ? 'border-gray-200 text-gray-400' : 'border-gray-600 text-gray-500'}`}>
-         Powered by YourCouponAPI
+         Powered by DiscountDB
       </footer>
     </div>
   );
