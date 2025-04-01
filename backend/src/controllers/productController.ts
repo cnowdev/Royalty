@@ -19,6 +19,9 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
             where: {
                 retailerName: retailerName, retailerProductId: retailerProductID
             },
+            include: {
+                product: true,
+            },
         });
     
         //if no retailerProduct is found, or the data is stale, create or update the product using the productURL
@@ -33,15 +36,18 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
             const updatedRetailerProduct = await prisma.retailerProduct.findFirst({
                 where: {
                     retailerName: retailerName, retailerProductId: retailerProductID
-                }
+                },
+                include: {
+                    product: true,
+                },
             });
+
 
             res.json(updatedRetailerProduct);
 
             return;
         }
 
-        console.log(retailerProduct);
 
         res.json(retailerProduct);
 
@@ -71,6 +77,7 @@ export const getRetailerProductPricingData = async (req: Request, res: Response,
             throw new Error("Retailer products not found");
         }
 
+        console.log("Pricing info: ", retailerProducts);
         res.json(retailerProducts);
     } catch (error) {
         next(error);
@@ -109,7 +116,6 @@ export const getRelatedProducts = async (req: Request, res: Response, next: Next
                 return acc;
             }, {} as Record<string, typeof product.retailerProducts[0]>)
         );
-
         res.json(latestRetailerProducts);
     } catch (error) {
         next(error);
@@ -180,7 +186,6 @@ const getRelatedProductsFromObjectID = async (objectID: string): Promise<any> =>
         method: 'GET'
     }).then(response => response.json());
 
-    console.log(response);
     return response.matches;
 }
 
@@ -201,10 +206,6 @@ const getPriceComProductFromURL = async (url: string): Promise<any | null> => {
         method: 'GET'
     }).then(response => response.json());
 
-    console.log(response);
-
-    console.log(response.length)
-    console.log(response[0].ObjectId);
     if(!response || response.length === 0 || !response[0].ObjectId) {
         throw new Error("No objectID found in response");
     }

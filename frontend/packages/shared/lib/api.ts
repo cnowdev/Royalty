@@ -1,5 +1,5 @@
 import { Coupon, RetailerProduct } from './utils/shared-types.js'
-import { couponCacheStorage } from '@extension/storage';
+import { couponCacheStorage, retailerProductCacheStorage } from '@extension/storage';
 
 /**
  * API Helper class
@@ -86,15 +86,20 @@ class API {
      * @returns a list of RetailerProduct objects
      */
     async getRetailerProduct(productURL: string): Promise<RetailerProduct> {
+        let cache = await retailerProductCacheStorage.get();
         
-        const params = new URLSearchParams({
-            productURL: productURL,
-        })
+        if (cache[productURL] && cache[productURL].timestamp > Date.now() - 5 * 60 * 1000) {
+            console.log(`Returning cached retailer product for URL: ${productURL}`);
+            return cache[productURL].data;
+        }
+
+        const params = new URLSearchParams({ productURL });
         const url = `${this.baseUrl}/products/retailer-product?${params.toString()}`;
         const response = await this.baseFetch(url, 'GET');
-        if (!response) {
-            throw new Error('Failed to fetch retailer product');
-        }
+        console.log("Api response: ", response);
+        cache[productURL] = { data: response, timestamp: Date.now() };
+        retailerProductCacheStorage.set(cache);
+
         return response;
     }
 
