@@ -29,7 +29,8 @@ model RetailerProduct {
   description    String?
   retailerName     String
   retailerProductId String
-  retailerProductUrl String @unique
+  retailerProductUrl String
+  imageUrl String?
   price            Decimal
   createdAt        DateTime @default(now())
 }
