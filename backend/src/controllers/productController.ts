@@ -160,6 +160,7 @@ const createOrUpdateProduct = async (objectID: string): Promise<void> => {
                     name: match.productName ?? null,
                     productId: product.id,
                     createdAt: new Date(),
+                    imageUrl: match.imageUrl ?? null
                 }
             });
         } catch (err) {
