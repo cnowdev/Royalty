@@ -96,10 +96,10 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
                 waitMs: 750,
             },
             "amazon.com": {
-                inputSelector: "#spc-gcpromoinput",
-                submitSelector: "input[aria-labelledby=gcApplyButtonId-announce]",
+                inputSelector: "input[name=ppw-claimCode]",
+                submitSelector: "input[name=ppw-claimCodeApplyPressed]",
                 successSelector: ".e8i0p5k0",
-                errorSelector: "#addPromo_BadCode",
+                errorSelector: ".a-alert-content",
                 waitMs: 750,
             },
             "michaels.com": {
@@ -255,6 +255,8 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
                     });
 
                 return true;
+            } else{
+                return false
             }
         });
         window.hasCouponAutoApplyListener = true;

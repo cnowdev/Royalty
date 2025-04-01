@@ -205,25 +205,25 @@ const SidePanel = () => {
             </div>
             <div className={`grid grid-cols-3 gap-3 text-center`}>
               <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
-                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
+              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
                 <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
-                  ${currentProduct.price}
+                ${Number(currentProduct.price).toFixed(2)}
                 </p>
               </div>
               <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
-                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
-                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-green-500'}`}>
-                  ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
-                </p>
-                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
-                  {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
-                </p>
+              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
+              <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-green-500'}`}>
+                ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+              </p>
+              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
+                {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
+              </p>
               </div>
               <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
-                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
-                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
-                  ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
-                </p>
+              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
+              <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
+                ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+              </p>
               </div>
             </div>
 
