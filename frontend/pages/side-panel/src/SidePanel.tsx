@@ -2,7 +2,32 @@ import React, { useState, useEffect } from 'react';
 import '@src/SidePanel.css';
 import { useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
 import { exampleThemeStorage } from '@extension/storage';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale,
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
+
+// Register required Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale
+);
+
 
 // Mock price history data - this would come from your API
 const mockPriceHistory = [
@@ -14,6 +39,40 @@ const mockPriceHistory = [
   { date: 'Mar 15', price: 15.99 },
   { date: 'Mar 30', price: 14.99 },
 ];
+
+const data = {
+  labels: mockPriceHistory.map((entry) => entry.date),
+  datasets: [
+    {
+      label: 'Price ($)',
+      data: mockPriceHistory.map((entry) => entry.price),
+      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      tension: 0.3,
+      pointRadius: 4,
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: true },
+    tooltip: { enabled: true },
+  },
+  scales: {
+    x: {
+      type: 'time' as const,
+      time: { unit: 'month' },
+      title: { display: true, text: 'Date' },
+    },
+    y: {
+      title: { display: true, text: 'Price ($)' },
+      beginAtZero: false,
+    },
+  },
+};
 
 interface Retailer {
   productIdentifier: { sku: string };
@@ -202,6 +261,7 @@ const SidePanel = () => {
     }
   };
 
+
   return (
     <div className={`App w-full h-full font-sans ${isLight ? 'bg-slate-50' : 'bg-gray-800'}`}>
       <header className={`p-4 pb-3 border-b ${isLight ? 'border-gray-200' : 'border-gray-600'} flex justify-between items-center gap-2`}>
@@ -252,40 +312,7 @@ const SidePanel = () => {
                 Price History
               </h3>
               <div className="h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={mockPriceHistory}
-                    margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke={isLight ? "#eee" : "#444"} />
-                    <XAxis 
-                      dataKey="date" 
-                      tick={{ fontSize: 10 }} 
-                      stroke={isLight ? "#666" : "#aaa"}
-                    />
-                    <YAxis 
-                      domain={['auto', 'auto']} 
-                      tick={{ fontSize: 10 }} 
-                      stroke={isLight ? "#666" : "#aaa"}
-                      tickFormatter={(value: number) => `$${value}`}
-                    />
-                    <Tooltip 
-                      formatter={(value: number) => [`$${value}`, 'Price']}
-                      contentStyle={{
-                        backgroundColor: isLight ? '#fff' : '#374151',
-                        borderColor: isLight ? '#e5e7eb' : '#4b5563',
-                        color: isLight ? '#111827' : '#f9fafb'
-                      }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="price" 
-                      stroke="#10b981" 
-                      activeDot={{ r: 6 }} 
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Line data={data}/>
               </div>
             </div>
 
@@ -374,6 +401,7 @@ const SidePanel = () => {
       </main>
     </div>
   );
+
 };
 
 export default withErrorBoundary(
