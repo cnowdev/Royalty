@@ -43,6 +43,7 @@ const SidePanel = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentProduct, setCurrentProduct] = useState<RetailerProduct | null>(null);
   const [priceHistory, setPriceHistory] = useState<{ date: string; price: number }[]>([]);
+  const [showChart, setShowChart] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRetailers = async () => {
@@ -177,8 +178,55 @@ const SidePanel = () => {
               <h3 className={`text-sm font-medium mb-2 ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
                 Price History
               </h3>
-              <div className="h-48 md:h-64 lg:h-80">
-                <Line data={data} options={options} />
+              {currentProduct?.retailerName === "amazon" ? (
+                <>
+
+                  <div className="h-64 md:h-96 lg:h-[450px] relative">
+                    <button
+                      onClick={() => setShowChart((prev) => !prev)}
+                      className={`absolute top-[-10px] left-2 text-xs underline ${isLight ? 'text-blue-600' : 'text-blue-400'}`}
+                    >
+                      {showChart ? 'Show CCC' : 'Show Chart'}
+                    </button>
+                    {showChart ? (
+                      <Line data={data} options={options} />
+                    ) : (
+                      <img
+                        src={`https://charts.camelcamelcamel.com/us/${currentProduct.retailerProductId}/amazon.png?force=1&zero=0&w=100&h=100&desired=false&legend=1&ilt=1&tp=3m&fo=0&lang=en`} // Replace with the actual image URL
+                        alt="We may not support this product yet"
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="h-48 md:h-64 lg:h-80">
+                  <Line data={data} options={options} />
+                </div>
+              )}
+
+            </div>
+            <div className={`grid grid-cols-3 gap-3 text-center`}>
+              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
+                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
+                  ${currentProduct.price}
+                </p>
+              </div>
+              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
+                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-green-500'}`}>
+                  ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+                </p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
+                  {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
+                </p>
+              </div>
+              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
+                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
+                  ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+                </p>
               </div>
             </div>
 
@@ -189,11 +237,11 @@ const SidePanel = () => {
               </h3>
               <div className="space-y-3">
                 {retailers.map((retailer) => (
-                  <div 
+                  <div
                     key={retailer.id}
                     className={`p-3 rounded-lg border flex items-center ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}
                   >
-                    
+
                     <div className="flex-1 min-w-0">
                       <h4 className={`text-sm font-medium ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
                         {retailer.retailerName}
@@ -204,13 +252,13 @@ const SidePanel = () => {
                         </span>
                       </div>
                     </div>
-                    
-                    <button 
+
+                    <button
                       onClick={() => visitRetailerSite(retailer.retailerProductUrl)}
                       className={`ml-3 px-3 py-1 text-xs rounded transition-colors duration-150 
-                      ${isLight 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                      ${isLight
+                          ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                          : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                     >
                       Visit
                     </button>
@@ -227,7 +275,7 @@ const SidePanel = () => {
 
 export default withErrorBoundary(
   withSuspense(
-    SidePanel, 
+    SidePanel,
     <div className="w-full h-full flex items-center justify-center text-gray-500">Loading Price History...</div>
   ),
   <div className="w-full p-4 text-red-600">An unexpected error occurred.</div>

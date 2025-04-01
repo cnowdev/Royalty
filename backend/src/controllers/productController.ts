@@ -7,6 +7,10 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
 
         const response = await getPriceComProductFromURL(productURL as string);
         if(!response) throw new Error("No product found for URL");
+
+        console.log("Price.com response: ", response);
+
+
         const retailerName = response.retailer;
         const retailerProductID = response.productIdentifier.sku;
 
@@ -77,7 +81,6 @@ export const getRetailerProductPricingData = async (req: Request, res: Response,
             throw new Error("Retailer products not found");
         }
 
-        console.log("Pricing info: ", retailerProducts);
         res.json(retailerProducts);
     } catch (error) {
         next(error);
