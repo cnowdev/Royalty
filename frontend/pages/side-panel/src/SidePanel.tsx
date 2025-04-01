@@ -241,10 +241,17 @@ const SidePanel = () => {
                     key={retailer.id}
                     className={`p-3 rounded-lg border flex items-center ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}
                   >
+                    <div className="w-10 h-10 flex-shrink-0 mr-3 bg-white rounded overflow-hidden border">
+                      <img 
+                        src={currentProduct.imageUrl} 
+                        alt={retailer.retailerName} 
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
 
                     <div className="flex-1 min-w-0">
                       <h4 className={`text-sm font-medium ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
-                        {retailer.retailerName}
+                        {retailer.retailerName.charAt(0).toUpperCase() + retailer.retailerName.slice(1)}
                       </h4>
                       <div className="flex items-center text-xs mt-1 space-x-2">
                         <span className={`font-medium ${isLight ? 'text-gray-700' : 'text-gray-300'}`}>
