@@ -19,7 +19,12 @@ console.log('content script loaded');
     function stripUrlParams(url: string): string {
         const urlObj = new URL(url);
         urlObj.search = ''; // Remove all query parameters
-        return urlObj.toString();
+        urlObj.hash = ''; // Remove anchor tags
+        let strippedUrl = urlObj.toString();
+        if (strippedUrl.endsWith('/')) {
+            strippedUrl = strippedUrl.slice(0, -1); // Remove the trailing slash
+        }
+        return strippedUrl;
     }
 
     function redirectToAffiliateUrl(currentUrl: string): void {
@@ -40,7 +45,7 @@ console.log('content script loaded');
 
         const currentUrl = window.location.href;
         const currentStrippedUrl = stripUrlParams(currentUrl);
-        if (currentStrippedUrl !== lastCheckedUrl && isAmazonProductPage(currentUrl) && currentUrl !== lastCheckedUrl) {
+        if (currentStrippedUrl !== lastCheckedUrl && isAmazonProductPage(currentUrl) && currentUrl !== lastCheckedUrl && !currentUrl.includes(lastCheckedUrl || '') && !(lastCheckedUrl || currentStrippedUrl).includes(currentStrippedUrl || '')) {
             const strippedUrl = stripUrlParams(currentUrl);
             lastCheckedUrl = strippedUrl;
             localStorage.setItem('lastCheckedUrl', strippedUrl);
@@ -48,8 +53,6 @@ console.log('content script loaded');
             if (!hasRequiredParams(currentUrl)) {
                 redirectToAffiliateUrl(strippedUrl);
             }
-        } else{
-            console.log('Stopped redirect')
         }
     }, 100);
 })();
