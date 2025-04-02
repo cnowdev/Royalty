@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const productURLs = [
-  "amazon.com/*/dp",
+  "amazon.com*/dp",
   "target.com/p",
   "bestbuy.com/site/*\\.p",
   "macys.com/shop/product",
@@ -116,18 +116,6 @@ export default function App() {
       clearInterval(intervalId);
       if (button) {
       document.body.removeChild(button);
-      }
-    };
-    const originalPushState = history.pushState;
-    history.pushState = function (...args) {
-      originalPushState.apply(this, args);
-      handleURLChange();
-    };
-
-    return () => {
-      window.removeEventListener("popstate", handleURLChange);
-      if (button) {
-        document.body.removeChild(button);
       }
     };
   }, []);
