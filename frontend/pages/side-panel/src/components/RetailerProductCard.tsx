@@ -3,6 +3,7 @@ import { RetailerProduct } from '@extension/shared';
 import { getRetailerDisplayName, getRetailerLogo } from '@src/utils';
 
 interface RetailerProductCardProps {
+  currentProduct: RetailerProduct;
   retailerProduct: RetailerProduct;
   isLight?: boolean;
 }
@@ -26,16 +27,16 @@ const visitRetailerSite = (url: string) => {
   }
 };
 
-export default function RetailerProductCard({ retailerProduct, isLight }: RetailerProductCardProps) {
+export default function RetailerProductCard({ retailerProduct, isLight, currentProduct }: RetailerProductCardProps) {
   const { retailerName, price, retailerProductUrl } = retailerProduct as any;
+  const priceDifference = currentProduct.price - price;
   const logoSvg = getRetailerLogo(retailerName);
   const formattedPrice = Number(price).toFixed(2);
 
-
   const displayLogo = logoSvg ? (
-    <img src={chrome.runtime.getURL(logoSvg)} alt={retailerName} className={`w-10 h-10 object-contain rounded`}/>
+    <img src={chrome.runtime.getURL(logoSvg)} alt={retailerName} className="w-12 h-12 object-contain rounded" />
   ) : (
-    <div className={`w-10 h-10 rounded flex items-center justify-center text-sm font-semibold text-white ${getPastelBackground(retailerName.charAt(0).toUpperCase())}`}>
+    <div className={`w-12 h-12 rounded flex items-center justify-center text-base font-semibold text-white ${getPastelBackground(retailerName.charAt(0).toUpperCase())}`}>
       {retailerName.charAt(0).toUpperCase()}
     </div>
   );
@@ -43,25 +44,27 @@ export default function RetailerProductCard({ retailerProduct, isLight }: Retail
   return (
     <div
       key={retailerProduct.id}
-      className={`p-4 rounded-xl border shadow-md flex items-center space-x-4 ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}
+      onClick={() => visitRetailerSite(retailerProductUrl)}
+      className={`p-5 rounded-xl border shadow-lg flex items-center justify-between space-x-5 cursor-pointer transition hover:shadow-xl ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}
     >
       {displayLogo}
 
       <div className="flex-1 min-w-0">
-        <h4 className={`text-base font-semibold ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
+        <div className={`text-lg font-semibold ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
           {getRetailerDisplayName(retailerName)}
-        </h4>
-        <div className={`text-sm mt-1 ${isLight ? 'text-gray-700' : 'text-gray-300'}`}>
-          ${formattedPrice}
         </div>
       </div>
 
-      <button
-        onClick={() => visitRetailerSite(retailerProductUrl)}
-        className={`ml-3 px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-150 shadow ${isLight ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-      >
-        Visit
-      </button>
+      <div className="text-right">
+        <div className={`text-2xl font-bold ${isLight ? 'text-gray-800' : 'text-white'}`}>
+          ${formattedPrice}
+        </div>
+        {priceDifference > 0 && (
+          <div className={`mt-1 text-xs font-bold ${isLight ? 'bg-green-100 text-green-800' : 'bg-green-800 text-green-100'} px-2 py-0.5 rounded-full inline-block`}>
+            Save ${priceDifference.toFixed(2)}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -165,7 +165,7 @@ const SidePanel = () => {
             </div>
 
             {/* Price Chart */}
-            <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+            <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
               <h3 className={`text-sm font-medium mb-2 ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
                 Price History
               </h3>
@@ -191,29 +191,29 @@ const SidePanel = () => {
                   </div>
                 </>
               ) : (
-                <div className="h-48 md:h-64 lg:h-80">
+                <div className="h-48 md:h-64 lg:h-80 ">
                   <Line data={data} options={options} />
                 </div>
               )}
 
             </div>
             <div className={`grid grid-cols-3 gap-3 text-center`}>
-              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
                 <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
                 ${Number(currentProduct.price).toFixed(2)}
                 </p>
               </div>
-              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
-              <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-green-500'}`}>
+              <p className={`text-lg font-bold text-green-500`}>
                 ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
               </p>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
                 {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
               </p>
               </div>
-              <div className={`p-3 rounded-lg border ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
               <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
                 ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
@@ -227,7 +227,7 @@ const SidePanel = () => {
                 All Retailers
               </h3>
               <div className="space-y-3">
-                {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight}/>)}
+                {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight} currentProduct={currentProduct}/>)}
               </div>
             </div>
           </div>
