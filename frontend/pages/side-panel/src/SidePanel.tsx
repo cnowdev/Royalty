@@ -18,6 +18,7 @@ import {
   TimeScale,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import RetailerProductCard from './components/RetailerProductCard';
 
 // Register required Chart.js components
 ChartJS.register(
@@ -101,16 +102,6 @@ const SidePanel = () => {
 
     chrome.tabs.onUpdated.addListener(handleTabUpdate);
   }, []);
-
-  const visitRetailerSite = (url: string) => {
-    if (url) {
-      let fullUrl = url;
-      if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
-        fullUrl = `https://${fullUrl}`;
-      }
-      chrome.tabs.create({ url: fullUrl });
-    }
-  };
 
 
   const data = {
@@ -236,34 +227,7 @@ const SidePanel = () => {
                 All Retailers
               </h3>
               <div className="space-y-3">
-                {retailers.map((retailer) => (
-                  <div
-                    key={retailer.id}
-                    className={`p-3 rounded-lg border flex items-center ${isLight ? 'border-gray-500 bg-white' : 'border-gray-700 bg-gray-900'}`}
-                  >
-
-                    <div className="flex-1 min-w-0">
-                      <h4 className={`text-sm font-medium ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
-                        {retailer.retailerName}
-                      </h4>
-                      <div className="flex items-center text-xs mt-1 space-x-2">
-                        <span className={`font-medium ${isLight ? 'text-gray-700' : 'text-gray-300'}`}>
-                          ${retailer.price}
-                        </span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => visitRetailerSite(retailer.retailerProductUrl)}
-                      className={`ml-3 px-3 py-1 text-xs rounded transition-colors duration-150 
-                      ${isLight
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                          : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                    >
-                      Visit
-                    </button>
-                  </div>
-                ))}
+                {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight}/>)}
               </div>
             </div>
           </div>
