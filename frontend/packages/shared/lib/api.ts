@@ -7,7 +7,7 @@ import { couponCacheStorage, retailerProductCacheStorage } from '@extension/stor
  * Used for data caching and provides methods for interacting with the API.
  */
 class API {
-    private baseUrl: string = process.env.CEB_API_URL || 'http://localhost:3000';
+    private baseUrl: string = 'http://localhost:3001';
 
     private async baseFetch(url: string, method: string = 'GET', body?: any): Promise<any> {
         const options: RequestInit = {
