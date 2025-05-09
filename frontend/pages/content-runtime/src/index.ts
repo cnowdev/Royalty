@@ -157,24 +157,24 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
 
         if (domain === "michaels.com") {
             let testinputField = document.querySelector<HTMLInputElement>(config.inputSelector);
-            if(!testinputField) {
+            if (!testinputField) {
                 const button = document.querySelector<HTMLButtonElement>(".css-1c7c9ch");
                 if (button) {
                     button.click();
                     await delay(500);
-                    
+
                 }
             }
         }
 
         if (domain === "kohls.com") {
             let testinputField = document.querySelector<HTMLInputElement>(config.inputSelector);
-            if(!testinputField) {
+            if (!testinputField) {
                 const button = document.querySelector<HTMLButtonElement>(".open-offers-block");
                 if (button) {
                     button.click();
                     await delay(500);
-                    
+
                 }
             }
         }
@@ -255,7 +255,7 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
                     });
 
                 return true;
-            } else{
+            } else {
                 return false
             }
         });
@@ -265,4 +265,4 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
     }
 }
 
-export {}; // Ensure this file is treated as a module.
+export { }; // Ensure this file is treated as a module.

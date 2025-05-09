@@ -6,18 +6,8 @@ import { Coupon } from '@extension/shared';
 import { CouponCard } from './components/CouponCard';
 import { ToggleButton } from './components/ToggleButton';
 import { getCurrentTab, getDomain } from './utils';
-import { APIClient } from '@extension/shared';
+import { APIClient, autoApplyProductURLs } from '@extension/shared';
 
-const autoApplyProductURLs = [
-  "www.codecademy.com/checkout",
-  "www.target.com/cart",
-  "www.costco.com/SinglePageCheckoutView",
-  "www.amazon.com/checkout",
-  "www.michaels.com/cart",
-  "www.skillshare.com/en/membership/checkout",
-  "www.kohls.com/checkout",
-  "www.gap.com/shopping-bag",
-]
 
 
 const Popup = () => {
@@ -44,8 +34,6 @@ const Popup = () => {
       setMerchantName('Loading...'); // Set initial loading title
       setMerchantUrl(null);
       try {
-
-
         const currentURL = await getCurrentTab().then(url => getDomain(url));
         setCurrentURL(await getCurrentTab());
         console.log("Current URL: " + currentURL)
@@ -88,6 +76,7 @@ const Popup = () => {
     };
 
     fetchCoupons();
+    
   }, []);
 
   const goToMerchantSite = () => {
@@ -101,6 +90,7 @@ const Popup = () => {
   };
 
   const handleAutoApply = async () => {
+    console.log(coupons)
     if (!coupons || coupons.length === 0) return;
 
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
