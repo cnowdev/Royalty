@@ -13,16 +13,3 @@ export const getRetailerDisplayName = (retailerName: string): string => {
 
     return names[retailerName] || retailerName.charAt(0).toUpperCase() + retailerName.slice(1);
 }
-
-export const getRetailerLogo = (retailerName: string): string | null => {
-    //get logo svg from ../public/logos/${retailerName}.svg
-
-    const logos = ['amazon', 'stockx', 'target', 'walmart', 'walgreens'];
-
-    if(!logos.includes(retailerName)) {
-        return null;
-    }
-
-    const logo = `side-panel/logos/${retailerName}.jpeg`;
-    return logo;
-}

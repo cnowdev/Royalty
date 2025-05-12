@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RetailerProduct } from '@extension/shared';
-import { getRetailerDisplayName, getRetailerLogo } from '@src/utils';
+import { getRetailerDisplayName } from '@src/utils';
 
 interface RetailerProductCardProps {
   currentProduct: RetailerProduct;
@@ -30,11 +30,13 @@ const visitRetailerSite = (url: string) => {
 export default function RetailerProductCard({ retailerProduct, isLight, currentProduct }: RetailerProductCardProps) {
   const { retailerName, price, retailerProductUrl } = retailerProduct as any;
   const priceDifference = currentProduct.price - price;
-  const logoSvg = getRetailerLogo(retailerName);
+  const logo = `http://localhost:3001/assets/logos/${retailerName}.jpeg`;
   const formattedPrice = Number(price).toFixed(2);
 
-  const displayLogo = logoSvg ? (
-    <img src={chrome.runtime.getURL(logoSvg)} alt={retailerName} className="w-12 h-12 object-contain rounded" />
+  const [logoError, setLogoError] = useState(false);
+
+  const displayLogo = !logoError ? (
+    <img src={logo} alt={retailerName} className="w-12 h-12 object-contain rounded" onError={() => setLogoError(true)}/>
   ) : (
     <div className={`w-12 h-12 rounded flex items-center justify-center text-base font-semibold text-white ${getPastelBackground(retailerName.charAt(0).toUpperCase())}`}>
       {retailerName.charAt(0).toUpperCase()}

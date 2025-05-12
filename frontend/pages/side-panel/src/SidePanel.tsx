@@ -153,7 +153,7 @@ const SidePanel = () => {
             {/* Product Title and Image */}
             <div className="flex items-center gap-3">
               <img 
-                src={currentProduct.imageUrl || 'https://via.placeholder.com/150'} 
+                src={currentProduct.imageUrl} 
                 alt={currentProduct.name || 'Product Image'} 
                 className="w-16 h-16 object-cover rounded"
               />

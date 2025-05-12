@@ -12,6 +12,7 @@ app.get('/', (req: any, res: { send: (arg0: string) => void; }) => {
 
 app.use('/coupons', couponRoutes);
 app.use('/products', productRoutes);
+app.use('/assets', express.static('assets'));
 
 app.use(errorHandler);
 
