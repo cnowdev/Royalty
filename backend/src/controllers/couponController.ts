@@ -5,7 +5,6 @@ const discountDBUrl = 'https://api.discountdb.ch/api/v1'
 export const searchCoupons = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { query, sort_by, limit } = req.query;
-        console.log(req.query);
 
         if (!query || !sort_by || !limit) {
             throw new Error("missing fields");

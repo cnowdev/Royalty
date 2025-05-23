@@ -14,6 +14,7 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
         const retailerName = response.retailer;
         const retailerProductID = response.productIdentifier.sku;
 
+        
 
         if(!retailerName || !retailerProductID || typeof retailerName !== 'string' || typeof retailerProductID !== 'string') {
             throw new Error("Invalid retailerName or retailerProductID");
@@ -27,7 +28,9 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
                 product: true,
             },
         });
-    
+        
+        console.log('hello');
+
         //if no retailerProduct is found, or the data is stale, create or update the product using the productURL
         if(!retailerProduct || retailerProduct.createdAt.getTime() < Date.now() - 1000 * 60 * 60 * 12) {
             if(!productURL) throw new Error("No retailer product found and no product URL provided");
@@ -97,6 +100,44 @@ export const getRelatedProducts = async (req: Request, res: Response, next: Next
 
         const product = await prisma.product.findUnique({
             where: { objectId },
+            include: {
+                retailerProducts: true,
+            },
+        });
+
+        if (!product) {
+            throw new Error("Product not found");
+        }
+
+        // Filter to get the latest retailerProduct for each retailerName
+        const latestRetailerProducts = Object.values(
+            product.retailerProducts.reduce((acc, retailerProduct) => {
+                const retailerName = retailerProduct.retailerName;
+                if (
+                    !acc[retailerName] || 
+                    new Date(retailerProduct.createdAt).getTime() > new Date(acc[retailerName].createdAt).getTime()
+                ) {
+                    acc[retailerName] = retailerProduct;
+                }
+                return acc;
+            }, {} as Record<string, typeof product.retailerProducts[0]>)
+        );
+        res.json(latestRetailerProducts);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getRelatedProductsByProductID = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { productId } = req.query;
+
+        if (!productId || typeof productId !== 'string') {
+            throw new Error("Invalid objectId parameter");
+        }
+
+        const product = await prisma.product.findUnique({
+            where: { id: parseInt(productId) },
             include: {
                 retailerProducts: true,
             },

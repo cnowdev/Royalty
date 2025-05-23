@@ -2,9 +2,11 @@ import express from 'express';
 import { errorHandler } from './middlewares/errorHandler';
 import couponRoutes from './routes/couponRoutes'
 import productRoutes from './routes/productRoutes'
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req: any, res: { send: (arg0: string) => void; }) => {
     res.send('Hello, world!');
