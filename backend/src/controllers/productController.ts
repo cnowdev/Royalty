@@ -78,6 +78,9 @@ export const getRetailerProductPricingData = async (req: Request, res: Response,
                 retailerName: retailerName as string,
                 retailerProductId: retailerProductID as string,
             },
+            orderBy: {
+                createdAt: 'asc',
+            }
         });
 
         if (!retailerProducts) {
