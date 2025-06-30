@@ -8,6 +8,7 @@ export const productURLs = [
     "sephora.com/product",
     "jcpenney.com/p",
     "wayfair.com/*/pdp",
+    "walmart.com/ip"
 ];
 
 export const autoApplyProductURLs = [

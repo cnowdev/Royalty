@@ -104,7 +104,7 @@ export default function App() {
           button.style.transform = "translateY(-50%)";
           button.style.width = "65px";
           button.style.height = "65px"; // Adjust height to fit both logo and text
-          button.style.backgroundColor = "#007bff";
+          button.style.backgroundColor = "#030712";
           button.style.color = "#fff";
           button.style.border = "5px solid #007bff";
           button.style.borderRadius = "10px";
@@ -117,19 +117,26 @@ export default function App() {
           button.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
 
           // Add a logo (example: emoji or icon)
+          /*
           const logo = document.createElement("span");
           logo.textContent = "R"; // Replace with your logo or icon
           logo.style.fontSize = "35px";
           logo.style.textAlign = "center";
           button.appendChild(logo);
-
+          */
+          const logo = document.createElement("img");
+          logo.src = chrome.runtime.getURL("content-ui/Royalty-Icon.svg");
+          button.appendChild(logo);
           // Add logo text below the logo
+
+          /*
           const logoText = document.createElement("span");
           logoText.textContent = "History";
           logoText.style.fontSize = "14px";
           logoText.style.color = "#fff";
           logoText.style.textAlign = "center";
           button.appendChild(logoText);
+          */
 
           button.addEventListener("click", () => {
             chrome.runtime.sendMessage(
