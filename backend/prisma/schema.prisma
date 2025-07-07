@@ -34,3 +34,13 @@ model RetailerProduct {
   price            Decimal
   createdAt        DateTime @default(now())
 }
+
+// ID, coupon code, retailerName, description?, expiration date?, createdAt
+model Coupon {
+  id                Int      @id @default(autoincrement())
+  code              String
+  retailerName      String
+  description       String?
+  expirationDate    DateTime?
+  createdAt         DateTime @default(now())
+}

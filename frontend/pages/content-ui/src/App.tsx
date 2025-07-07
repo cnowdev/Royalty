@@ -126,6 +126,8 @@ export default function App() {
           */
           const logo = document.createElement("img");
           logo.src = chrome.runtime.getURL("content-ui/Royalty-Icon.svg");
+          logo.style.height = "40px"; // Adjust height to fit the button
+          logo.style.width = "40px"; // Adjust width to fit the button
           button.appendChild(logo);
           // Add logo text below the logo
 
