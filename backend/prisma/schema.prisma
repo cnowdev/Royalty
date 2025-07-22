@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output = "../generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,33 +9,35 @@ datasource db {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  objectId    String   @unique // Retrieved from your API
-  lastUpdated DateTime @updatedAt
+  id               Int               @id @default(autoincrement())
+  objectId         String            @unique
+  lastUpdated      DateTime          @updatedAt
   retailerProducts RetailerProduct[]
 }
 
 model RetailerProduct {
-  id                Int      @id @default(autoincrement())
-  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId        Int
-  name           String?
-  description    String?
-  retailerName     String
-  retailerProductId String
+  id                 Int      @id @default(autoincrement())
+  productId          Int
+  retailerName       String
+  retailerProductId  String
   retailerProductUrl String
-  imageUrl String?
-  price            Decimal
-  createdAt        DateTime @default(now())
+  price              Decimal
+  createdAt          DateTime @default(now())
+  description        String?
+  name               String?
+  imageUrl           String?
+  product            Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-// ID, coupon code, retailerName, description?, expiration date?, createdAt
 model Coupon {
-  id                Int      @id @default(autoincrement())
-  code              String
-  retailerName      String
-  retailerUrl       String
-  description       String?
-  expirationDate    DateTime?
-  createdAt         DateTime @default(now())
+  id             Int       @id @default(autoincrement())
+  code           String
+  retailerName   String
+  description    String?
+  expirationDate DateTime?
+  createdAt      DateTime  @default(now())
+  retailerUrl    String
+
+  // Unique constraint to ensure no duplicate coupons for the same retailer
+  @@unique([code, retailerName])
 }
