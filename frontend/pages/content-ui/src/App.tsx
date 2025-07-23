@@ -17,58 +17,87 @@ export default function App() {
 
     if (autoApplyProductURLs.some((url) => currentTab.includes(url))) {
       if (!messageDiv) {
+        // Create a container for the shadow root
+        const shadowHost = document.createElement("div");
+        shadowHost.style.position = "fixed";
+        shadowHost.style.top = "10px";
+        shadowHost.style.right = "10px";
+        shadowHost.style.zIndex = "9999";
+        document.body.appendChild(shadowHost);
+
+        // Attach shadow root
+        const shadow = shadowHost.attachShadow({ mode: "open" });
+
+        // Create style element for shadow DOM
+        const style = document.createElement("style");
+        style.textContent = `
+      .royalty-message {
+        background: #0C2B62;
+        color: #fff;
+        padding: 20px 5px 20px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        max-width: 300px;
+        max-height: 150px;
+        position: relative;
+      }
+      .royalty-close {
+        background: transparent;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        position: absolute;
+        top: 5px;
+        right: 10px;
+      }
+      .royalty-apply {
+        background: #217ED1;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-left: 10px;
+      }
+      .royalty-error {
+        color: #ff4d4f;
+        font-size: 12px;
+        margin-top: 10px;
+        display: none;
+      }
+    `;
+        shadow.appendChild(style);
+
+        // Create message div
         messageDiv = document.createElement("div");
+        messageDiv.className = "royalty-message";
         messageDiv.textContent = "Royalty found coupons for this site, would you like to apply them?";
-        messageDiv.style.position = "fixed";
-        messageDiv.style.top = "10px";
-        messageDiv.style.right = "10px";
-        messageDiv.style.backgroundColor = "#0C2B62";
-        messageDiv.style.color = "#fff";
-        messageDiv.style.padding = "20px 5px 20px 20px";
-        messageDiv.style.borderRadius = "5px";
-        messageDiv.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
-        messageDiv.style.zIndex = "9999";
-        messageDiv.style.fontSize = "14px";
-        messageDiv.style.fontWeight = "bold";
-        messageDiv.style.display = "flex";
-        messageDiv.style.flexDirection = "column";
-        messageDiv.style.alignItems = "center";
-        messageDiv.style.justifyContent = "center";
-        messageDiv.style.gap = "10px";
-        messageDiv.style.maxWidth = "300px";
-        messageDiv.style.maxHeight = "150px";
 
+        // Create close button
         const closeButton = document.createElement("button");
+        closeButton.className = "royalty-close";
         closeButton.textContent = "X";
-        closeButton.style.backgroundColor = "transparent";
-        closeButton.style.color = "#fff";
-        closeButton.style.border = "none";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.fontSize = "16px";
-        closeButton.style.fontWeight = "bold";
-        closeButton.style.position = "absolute";
-        closeButton.style.top = "5px";
-        closeButton.style.right = "10px";
-
-        const applyCouponsButton = document.createElement("button");
-        applyCouponsButton.textContent = "Apply Coupons";
-        applyCouponsButton.style.backgroundColor = "#217ED1";
-        applyCouponsButton.style.color = "#fff";
-        applyCouponsButton.style.border = "none";
-        applyCouponsButton.style.cursor = "pointer";
-        applyCouponsButton.style.fontSize = "14px";
-        applyCouponsButton.style.fontWeight = "bold";
-        applyCouponsButton.style.padding = "5px 10px";
-        applyCouponsButton.style.marginLeft = "10px";
-        applyCouponsButton.style.borderRadius = "5px";
-
-
         closeButton.addEventListener("click", () => {
-          if (messageDiv) {
-            document.body.removeChild(messageDiv);
-            messageDiv = null;
+          if (shadowHost) {
+            document.body.removeChild(shadowHost);
           }
         });
+
+        // Create apply button
+        const applyCouponsButton = document.createElement("button");
+        applyCouponsButton.className = "royalty-apply";
+        applyCouponsButton.textContent = "Apply Coupons";
 
         applyCouponsButton.addEventListener("click", async () => {
           chrome.runtime.sendMessage({ type: 'AUTO_APPLY_BUTTON_CLICKED' }, (response) => {
@@ -81,9 +110,16 @@ export default function App() {
           });
         });
 
+        // Create error text
+        const errorText = document.createElement("div");
+        errorText.className = "royalty-error";
+        errorText.textContent = "An error occurred while applying coupons.";
+
+        // Append elements
         messageDiv.appendChild(closeButton);
         messageDiv.appendChild(applyCouponsButton);
-        document.body.appendChild(messageDiv);
+        messageDiv.appendChild(errorText);
+        shadow.appendChild(messageDiv);
       }
     } else {
       if (messageDiv) {
@@ -106,7 +142,7 @@ export default function App() {
           button.style.height = "65px"; // Adjust height to fit both logo and text
           button.style.backgroundColor = "#030712";
           button.style.color = "#fff";
-          button.style.border = "5px solid #007bff";
+          button.style.border = "5px solid #217ED1";
           button.style.borderRadius = "10px";
           button.style.cursor = "pointer";
           button.style.zIndex = "1000";
@@ -116,29 +152,13 @@ export default function App() {
           button.style.justifyContent = "center";
           button.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
 
-          // Add a logo (example: emoji or icon)
-          /*
-          const logo = document.createElement("span");
-          logo.textContent = "R"; // Replace with your logo or icon
-          logo.style.fontSize = "35px";
-          logo.style.textAlign = "center";
-          button.appendChild(logo);
-          */
+
           const logo = document.createElement("img");
           logo.src = chrome.runtime.getURL("content-ui/Royalty-Icon.svg");
           logo.style.height = "40px"; // Adjust height to fit the button
           logo.style.width = "40px"; // Adjust width to fit the button
           button.appendChild(logo);
-          // Add logo text below the logo
 
-          /*
-          const logoText = document.createElement("span");
-          logoText.textContent = "History";
-          logoText.style.fontSize = "14px";
-          logoText.style.color = "#fff";
-          logoText.style.textAlign = "center";
-          button.appendChild(logoText);
-          */
 
           button.addEventListener("click", () => {
             chrome.runtime.sendMessage(
