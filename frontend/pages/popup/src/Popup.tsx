@@ -46,21 +46,24 @@ const Popup = () => {
           return;
         }
 
-        const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 'newest', 10);
+        const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 10);
 
         if (couponResponse && couponResponse.length > 0) {
           setCoupons(couponResponse);
           const firstCoupon = couponResponse[0];
-          if (!currentURL.includes(firstCoupon.merchant_url)) {
+          if (!currentURL.includes(firstCoupon.retailerUrl)) {
             setCoupons([]);
             setMerchantName('No Coupons Found');
             setIsLoading(false);
             return;
           }
-          console.log("Merchant Name: ", firstCoupon.merchant_url);
+          console.log("Retailer Name: ", firstCoupon.retailerName);
 
-          setMerchantName(firstCoupon.merchant_name?.replace(' Coupons', '') + ' Coupons' || 'Available Coupons');
-          setMerchantUrl(firstCoupon.merchant_url || null);
+          setMerchantName(
+            (firstCoupon.retailerName?.charAt(0).toUpperCase() + firstCoupon.retailerName?.slice(1).replace(' Coupons', '') + ' Coupons') || 'Available Coupons'
+          );
+
+          setMerchantUrl(firstCoupon.retailerUrl || null);
 
         } else {
           setCoupons([]);

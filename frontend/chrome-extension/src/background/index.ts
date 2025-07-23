@@ -23,7 +23,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       }
 
       try {
-        let coupons = await APIClient.searchCoupons(currentURL, 'newest', 10);
+        let coupons = await APIClient.searchCoupons(currentURL, 10);
         console.log("coupons: ", coupons);
       } catch (error) {
         console.error("Error fetching coupons:", error);
@@ -96,15 +96,15 @@ const fetchCoupons = async () => {
       return;
     }
 
-    const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 'newest', 10);
+    const couponResponse: Coupon[] = await APIClient.searchCoupons(currentURL, 10);
 
     if (couponResponse && couponResponse.length > 0) {
       coupons = couponResponse;
       const firstCoupon = couponResponse[0];
-      if (!currentURL.includes(firstCoupon.merchant_url)) {
+      if (!currentURL.includes(firstCoupon.retailerUrl)) {
         return;
       }
-      console.log("Merchant Name: ", firstCoupon.merchant_url);
+      console.log("Retailer Name: ", firstCoupon.retailerName);
 
     } else {
       coupons = [];

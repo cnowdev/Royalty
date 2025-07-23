@@ -25,10 +25,12 @@ export const CouponCard: React.FC<CouponCardProps> = ({ coupon, isLight }) => {
   return (
     <div className={`border rounded-lg p-3 md:p-4 mb-3 transition-colors duration-200 shadow-md ${ isLight ? 'bg-white border-gray-300 hover:shadow-lg' : 'bg-gray-700 border-gray-600 hover:bg-gray-650'}`}>
       <div className="flex justify-between items-start gap-2 mb-2">
-        <h3 className={`font-semibold text-sm md:text-base flex-1 ${ isLight ? 'text-gray-800' : 'text-white'}`}>{coupon.title}</h3>
+        <h3 className={`font-semibold text-sm md:text-base flex-1 ${ isLight ? 'text-gray-800' : 'text-white'}`}>{coupon.code}</h3>
+      {/*  this stuff is deprecated since we no longer have discount_type and discount_value. May revisit this
         <span className={`text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap ${ isLight ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-green-900 text-green-300 border border-green-700'}`}>
           {formatDiscount(coupon.discount_value, coupon.discount_type)}
         </span>
+      */}
       </div>
       {coupon.description && (
         <p className={`text-xs md:text-sm mb-3 ${ isLight ? 'text-gray-600' : 'text-gray-300'}`}>{coupon.description}</p>
