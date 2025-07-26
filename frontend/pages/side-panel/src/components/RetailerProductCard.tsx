@@ -47,7 +47,7 @@ export default function RetailerProductCard({ retailerProduct, isLight, currentP
     <div
       key={retailerProduct.id}
       onClick={() => visitRetailerSite(retailerProductUrl)}
-      className={`p-5 rounded-xl border shadow-lg flex items-center justify-between space-x-5 cursor-pointer transition hover:shadow-xl ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}
+      className={`p-5 rounded-xl border shadow-lg flex items-center justify-between space-x-5 cursor-pointer transition hover:shadow-xl ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}
     >
       {displayLogo}
 

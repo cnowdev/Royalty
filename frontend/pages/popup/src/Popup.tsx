@@ -176,18 +176,18 @@ const Popup = () => {
 
 
   return (
-    <div className={`App w-80 p-4 font-sans ${isLight ? 'bg-slate-50' : 'bg-gray-800'}`}>
+    <div className={`App w-80 p-4 font-sans ${isLight ? 'bg-slate-50' : 'bg-background'}`}>
 
-<header className={`mb-4 pb-3 border-b ${isLight ? 'border-gray-200' : 'border-gray-600'} flex items-center gap-3`}>
-  <h1
-    className={`text-lg font-bold truncate flex-1 ${isLight ? 'text-gray-900' : 'text-gray-100'} ${merchantUrl ? 'cursor-pointer hover:text-blue-600 dark:hover:text-blue-400' : ''}`}
-    onClick={goToMerchantSite}
-    title={merchantUrl ? `Visit ${merchantUrl}` : merchantName}
-  >
-    {merchantName}
-  </h1>
-  <ToggleButton isLight={isLight} toggleTheme={toggleTheme} />
-</header>
+    <header className={`mb-4 pb-3 border-b ${isLight ? 'border-gray-200' : 'border-border'} flex items-center gap-3`}>
+      <h1
+        className={`text-lg font-bold truncate flex-1 ${isLight ? 'text-gray-900' : 'text-gray-100'} ${merchantUrl ? 'cursor-pointer hover:text-blue-600 dark:hover:text-blue-400' : ''}`}
+        onClick={goToMerchantSite}
+        title={merchantUrl ? `Visit ${merchantUrl}` : merchantName}
+      >
+        {merchantName}
+      </h1>
+      <ToggleButton isLight={isLight} toggleTheme={toggleTheme} />
+    </header>
 
 
       <main className="max-h-96 overflow-y-auto pr-1 custom-scrollbar">
@@ -254,14 +254,14 @@ const Popup = () => {
       </main>
 
 
-      <footer className={`mt-4 pt-3 border-t text-xs text-center ${isLight ? 'border-gray-200 text-gray-400' : 'border-gray-600 text-gray-500'}`}>
+      <footer className={`mt-4 pt-3 border-t text-xs text-center ${isLight ? 'border-gray-200 text-gray-400' : 'border-border text-gray-500'}`}>
   <div className="grid grid-cols-2 gap-2">
     <button
       onClick={openPanel}
       title="Force open the price history panel. Might not work on all websites"
       className={`w-full px-3 py-2 text-sm font-medium rounded-lg border transition-colors duration-150 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${isLight
         ? 'border-gray-300 bg-white text-gray-900 hover:bg-gray-100 focus:ring-blue-500'
-        : 'border-gray-700 bg-gray-900 text-white hover:bg-gray-800 focus:ring-blue-500 dark:focus:ring-offset-gray-800'}`}
+        : 'border-border bg-background text-white hover:bg-primary focus:ring-blue-500 dark:focus:ring-offset-gray-800'}`}
     >
       📊 View Price History
     </button>
@@ -273,7 +273,7 @@ const Popup = () => {
         ? 'cursor-wait border-gray-300 bg-gray-300 text-gray-600'
         : isLight
           ? 'border-gray-300 bg-white text-gray-900 hover:bg-gray-100 focus:ring-blue-500'
-          : 'border-gray-700 bg-gray-900 text-white hover:bg-gray-800 focus:ring-blue-500 dark:focus:ring-offset-gray-800'}`}
+          : 'border-border bg-background text-white hover:bg-primary focus:ring-blue-500 dark:focus:ring-offset-gray-800'}`}
     >
       {isApplying ? 'Applying...' : '✨ Try Auto Apply'}
     </button>
