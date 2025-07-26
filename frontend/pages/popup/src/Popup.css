@@ -37,3 +37,4 @@ main:hover::-webkit-scrollbar-thumb { /* Show more clearly on hover */
 .dark main:hover::-webkit-scrollbar-thumb {
    background-color: theme('colors.gray.400');
 }
+

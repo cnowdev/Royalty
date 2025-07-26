@@ -110,7 +110,7 @@ const SidePanel = () => {
       {
         label: 'Price ($)',
         data: priceHistory.map((entry) => entry.price),
-        borderColor: 'rgba(75, 192, 192, 1)',
+        borderColor: '#217ED1',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         tension: 0.3,
         pointRadius: 4,
@@ -128,7 +128,7 @@ const SidePanel = () => {
   };
 
   return (
-    <div className={`App w-full h-full font-sans ${isLight ? 'bg-slate-50' : 'bg-gray-800'}`}>
+    <div className={`App w-full h-full font-sans ${isLight ? 'bg-slate-50' : 'bg-background'}`}>
       <header className={`p-4 pb-3 border-b ${isLight ? 'border-gray-200' : 'border-gray-600'} flex justify-between items-center gap-2`}>
         <h1 className={`text-lg font-bold truncate ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
           Price History
@@ -165,7 +165,7 @@ const SidePanel = () => {
             </div>
 
             {/* Price Chart */}
-            <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+            <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
               <h3 className={`text-sm font-medium mb-2 ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
                 Price History
               </h3>
@@ -198,13 +198,13 @@ const SidePanel = () => {
 
             </div>
             <div className={`grid grid-cols-3 gap-3 text-center`}>
-              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
                 <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
                 ${Number(currentProduct.price).toFixed(2)}
                 </p>
               </div>
-              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
               <p className={`text-lg font-bold text-green-500`}>
                 ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
@@ -213,7 +213,7 @@ const SidePanel = () => {
                 {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
               </p>
               </div>
-              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-gray-700 bg-gray-900'}`}>
+              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
               <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
               <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
                 ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}

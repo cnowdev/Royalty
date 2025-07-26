@@ -23,7 +23,7 @@ export const CouponCard: React.FC<CouponCardProps> = ({ coupon, isLight }) => {
   };
 
   return (
-    <div className={`border rounded-lg p-3 md:p-4 mb-3 transition-colors duration-200 shadow-md ${ isLight ? 'bg-white border-gray-300 hover:shadow-lg' : 'bg-gray-700 border-gray-600 hover:bg-gray-650'}`}>
+    <div className={`border rounded-lg p-3 md:p-4 mb-3 transition-colors duration-200 shadow-md ${ isLight ? 'bg-white border-gray-300 hover:shadow-lg' : 'bg-nav border-border hover:bg-gray-650'}`}>
       <div className="flex justify-between items-start gap-2 mb-2">
         <h3 className={`font-semibold text-sm md:text-base flex-1 ${ isLight ? 'text-gray-800' : 'text-white'}`}>{coupon.code}</h3>
       {/*  this stuff is deprecated since we no longer have discount_type and discount_value. May revisit this
