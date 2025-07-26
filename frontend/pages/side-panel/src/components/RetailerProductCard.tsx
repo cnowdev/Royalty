@@ -36,7 +36,7 @@ export default function RetailerProductCard({ retailerProduct, isLight, currentP
   const [logoError, setLogoError] = useState(false);
 
   const displayLogo = !logoError ? (
-    <img src={logo} alt={retailerName} className="w-12 h-12 object-contain rounded" onError={() => setLogoError(true)}/>
+    <img src={logo} alt={retailerName} className="w-12 h-12 object-contain rounded" onError={() => setLogoError(true)} />
   ) : (
     <div className={`w-12 h-12 rounded flex items-center justify-center text-base font-semibold text-white ${getPastelBackground(retailerName.charAt(0).toUpperCase())}`}>
       {retailerName.charAt(0).toUpperCase()}
@@ -44,29 +44,34 @@ export default function RetailerProductCard({ retailerProduct, isLight, currentP
   );
 
   return (
-    <div
-      key={retailerProduct.id}
-      onClick={() => visitRetailerSite(retailerProductUrl)}
-      className={`p-5 rounded-xl border shadow-lg flex items-center justify-between space-x-5 cursor-pointer transition hover:shadow-xl ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}
-    >
-      {displayLogo}
+    <>
+      {(retailerProduct.retailerName !== currentProduct.retailerName) &&
+        <div
+          key={retailerProduct.id}
+          onClick={() => visitRetailerSite(retailerProductUrl)}
+          className={`p-5 rounded-xl border shadow-lg flex items-center justify-between space-x-5 cursor-pointer transition hover:shadow-xl ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}
+        >
+          {displayLogo}
 
-      <div className="flex-1 min-w-0">
-        <div className={`text-lg font-semibold ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
-          {getRetailerDisplayName(retailerName)}
-        </div>
-      </div>
-
-      <div className="text-right">
-        <div className={`text-2xl font-bold ${isLight ? 'text-gray-800' : 'text-white'}`}>
-          ${formattedPrice}
-        </div>
-        {priceDifference > 0 && (
-          <div className={`mt-1 text-xs font-bold ${isLight ? 'bg-green-100 text-green-800' : 'bg-green-800 text-green-100'} px-2 py-0.5 rounded-full inline-block`}>
-            Save ${priceDifference.toFixed(2)}
+          <div className="flex-1 min-w-0">
+            <div className={`text-lg font-semibold ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
+              {getRetailerDisplayName(retailerName)}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+
+          <div className="text-right">
+            <div className={`text-2xl font-bold ${isLight ? 'text-gray-800' : 'text-white'}`}>
+              ${formattedPrice}
+            </div>
+            {priceDifference > 0 && (
+              <div className={`mt-1 text-xs font-bold ${isLight ? 'bg-green-100 text-green-800' : 'bg-green-800 text-green-100'} px-2 py-0.5 rounded-full inline-block`}>
+                Save ${priceDifference.toFixed(2)}
+              </div>
+            )}
+          </div>
+        </div>
+      }
+    </>
+
   );
 }

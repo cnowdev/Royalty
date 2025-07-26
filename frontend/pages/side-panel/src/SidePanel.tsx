@@ -85,7 +85,7 @@ const SidePanel = () => {
         setPriceHistory(priceHistoryData);
       } catch (err: any) {
         console.error('Error fetching retailers:', err);
-        setError("An error occurred while fetching data. Make sure you're on a product page. We also may not support this retailer yet.");
+        setError("An error occurred while fetching data. Make sure you're on a product page. We also may not support this retailer/product yet.");
       } finally {
         setIsLoading(false);
       }
