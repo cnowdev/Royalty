@@ -173,7 +173,26 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
                 const button = document.querySelector<HTMLButtonElement>(".open-offers-block");
                 if (button) {
                     button.click();
+                    let promoCodeInput = document.querySelector<HTMLInputElement>(config.inputSelector);
+                    while (!promoCodeInput) {
+                        await delay(500);
+                        promoCodeInput = document.querySelector<HTMLInputElement>(config.inputSelector);
+                    }
+
+                }
+            }
+        }
+
+        if (domain === "amazon.com"){
+            let promoCodeButton = document.querySelector<HTMLButtonElement>("#checkout-paymentOptionPanel > div > div.a-column.a-span8.a-spacing-none > div > div.a-column.a-span12.a-spacing-none.a-span-last > span > a");
+
+            if (promoCodeButton) {
+                promoCodeButton.click();
+                let promoCodeInput = document.querySelector<HTMLInputElement>(config.inputSelector);
+
+                while (!promoCodeInput) {
                     await delay(500);
+                    promoCodeInput = document.querySelector<HTMLInputElement>(config.inputSelector);
 
                 }
             }
