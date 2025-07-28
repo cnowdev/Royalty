@@ -1,122 +1,48 @@
-
-const styles: { [key: string]: React.CSSProperties } = {
-  royaltyContainer: {
-    background: '#030712',
-    color: '#f9fafb',
-    padding: 20,
-    borderRadius: 12,
-    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-    width: 340,
-    position: 'relative',
-    fontSize: 14,
-    lineHeight: '150%',
-  },
-  royaltyHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f9fafb',
-  },
-  royaltySubtext: {
-    fontSize: 13,
-    color: '#f9fafb',
-    marginBottom: 12,
-  },
-  royaltyDescription: {
-    color: '#217ED1',
-    fontWeight: 'bold',
-    marginBottom: 8,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-  },
-  royaltyIcon: {
-    width: 50,
-    height: 50,
-    background: '#030712',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 24,
-    marginRight: 10,
-  },
-  royaltyTop: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  royaltyButtons: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    gap: 10,
-    marginTop: 10,
-  },
-  royaltyApply: {
-    flex: 1,
-    background: '#217ED1',
-    color: 'white',
-    border: 'none',
-    padding: 10,
-    fontWeight: 'bold',
-    borderRadius: 6,
-    cursor: 'pointer',
-  },
-  royaltyLater: {
-    flex: 1,
-    background: '#d1d5db',
-    color: '#030712',
-    border: 'none',
-    padding: 10,
-    fontWeight: 'bold',
-    borderRadius: 6,
-    cursor: 'pointer',
-  },
-  royaltyClose: {
-    position: 'absolute',
-    top: 8,
-    right: 10,
-    background: 'none',
-    border: 'none',
-    fontSize: 16,
-    cursor: 'pointer',
-    color: '#d1d5db',
-    fontWeight: 'bold',
-  },
-  royaltyMessageWrapper: {
-    position: 'fixed',
-    top: 20,
-    right: 20,
-    zIndex: 9999,
-  },
-};
-
-export default function RoyaltyMessage({ onClose, onApply }: { onClose: () => void; onApply: () => void }) {
+export default function RoyaltyMessage({
+  onClose,
+  onApply,
+}: {
+  onClose: () => void;
+  onApply: () => void;
+}) {
   return (
-    <div style={styles.royaltyMessageWrapper}>
-      <div style={styles.royaltyContainer}>
-        <button style={styles.royaltyClose} onClick={onClose}>
+    <div className="fixed top-5 right-5 z-[9999]">
+      <div className="relative w-[340px] bg-background text-foreground p-5 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.12)] text-[14px] leading-[150%]">
+        <button
+          className="absolute top-2 right-2 bg-none border-none text-muted font-bold text-[16px] cursor-pointer"
+          onClick={onClose}
+          aria-label="Close"
+        >
           ×
         </button>
-        <div style={styles.royaltyTop}>
+        <div className="flex items-center mb-3">
           <div>
             <img
-              src={chrome.runtime.getURL('content-ui/Royalty-Icon.svg')}
-              style={styles.royaltyIcon}
+              src={chrome.runtime.getURL("content-ui/Royalty-Icon.svg")}
+              className="w-[50px] h-[50px] bg-background rounded-full flex items-center justify-center text-[24px] mr-2.5"
               alt="Royalty Icon"
             />
           </div>
           <div>
-            <div style={styles.royaltyHeader}>Royalty Found Coupons!</div>
+            <div className="text-[18px] font-bold text-foreground">
+              Royalty Found Coupons!
+            </div>
           </div>
         </div>
-        <div style={styles.royaltySubtext}>
+        <div className="text-[13px] text-foreground mb-3">
           We found working coupon codes for this site. Would you like to apply them automatically?
         </div>
-        <div style={styles.royaltyButtons}>
-          <button style={styles.royaltyApply} onClick={onApply}>
+        <div className="flex justify-between gap-2.5 mt-2.5">
+          <button
+            className="flex-1 bg-primary text-foreground border-none py-2 font-bold rounded-md cursor-pointer"
+            onClick={onApply}
+          >
             Apply Coupons
           </button>
-          <button style={styles.royaltyLater} onClick={onClose}>
+          <button
+            className="flex-1 bg-muted text-background border-none py-2 font-bold rounded-md cursor-pointer"
+            onClick={onClose}
+          >
             Try Later
           </button>
         </div>

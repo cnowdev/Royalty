@@ -1,33 +1,7 @@
-const styles: { [key: string]: React.CSSProperties } = {
-  royaltyButton: {
-    position: 'fixed',
-    top: '50%',
-    right: '1px',
-    transform: 'translateY(-50%)',
-    width: '65px',
-    height: '65px',
-    backgroundColor: '#030712',
-    color: '#fff',
-    border: '5px solid #217ED1',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    zIndex: 1000,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  royaltyButtonImg: {
-    height: '40px',
-    width: '40px',
-  },
-};
-
 export default function RoyaltyButton() {
   return (
     <button
-      style={styles.royaltyButton}
+      className="fixed top-1/2 right-[1px] -translate-y-1/2 w-[65px] h-[65px] bg-background text-foreground rounded-[10px] cursor-pointer z-[1000] flex flex-col items-center justify-center shadow-lg"
       onClick={() => {
         chrome.runtime.sendMessage({ type: 'OPEN_SIDE_PANEL' }, (response) => {
           if (chrome.runtime.lastError) {
@@ -40,7 +14,7 @@ export default function RoyaltyButton() {
     >
       <img
         src={chrome.runtime.getURL('content-ui/Royalty-Icon.svg')}
-        style={styles.royaltyButtonImg}
+        className="h-[40px] w-[40px]"
         alt="Royalty Logo"
       />
     </button>
