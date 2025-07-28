@@ -1,12 +1,11 @@
 import { autoApply } from './listeners/autoApply';
 import './types'
-import { SiteConfig, RequestPayload } from './types';
-import { setInputValue, clickElement, delay, isElementUsable, checkResult } from './utils';
+import { RequestPayload } from './types';
 
-if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
-    window.couponAutoApplyListenerAttached = true;
+console.log('index.ts run')
 
-    if (!window.hasCouponAutoApplyListener) {
+// Check if the listener has already been added to prevent duplicates
+if(!window.hasCouponAutoApplyListener) {
         console.log('[AutoApply] Adding message listener.');
         chrome.runtime.onMessage.addListener((request: RequestPayload, sender, sendResponse) => {
             
@@ -17,9 +16,6 @@ if (typeof window.couponAutoApplyListenerAttached === 'undefined') {
             }
         });
         window.hasCouponAutoApplyListener = true;
-    } else {
-        console.log('[AutoApply] Listener already added, skipping.');
-    }
 }
 
-export { }; // Ensure this file is treated as a module.
+export { };

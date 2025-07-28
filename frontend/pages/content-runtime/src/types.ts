@@ -1,6 +1,5 @@
 declare global {
     interface Window {
-        couponAutoApplyListenerAttached?: boolean;
         hasCouponAutoApplyListener?: boolean;
     }
 }
