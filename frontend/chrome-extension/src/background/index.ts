@@ -8,32 +8,23 @@ exampleThemeStorage.get().then(theme => {
   console.log('theme', theme);
 });
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url) {
-    (async () => {
-      console.log("Before coupon fetch");
-      const currentURL = await getCurrentTab().then(url => getDomain(url));
-      console.log("current url: " + currentURL);
-
-      const validTLDs = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.co', '.us', '.uk', '.ca', '.au', '.in'];
-      const hasValidTLD = validTLDs.some(tld => currentURL.endsWith(tld));
-      if (!hasValidTLD) {
-        console.error("Invalid domain for coupons:", currentURL);
-        return;
-      }
-
-      try {
-        let coupons = await APIClient.searchCoupons(currentURL, 10);
-        console.log("coupons: ", coupons);
-      } catch (error) {
-        console.error("Error fetching coupons:", error);
-      }
-    })();
-  }
-});
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+//   if (changeInfo.url) {
+//     (async () => {
+//       console.log("Before coupon fetch");
+//       try {
+//         const coupons = await fetchCoupons();
+//         console.log("coupons: ", coupons);
+//       } catch (error) {
+//         console.error("Error fetching coupons:", error);
+//       }
+//     })();
+//   }
+// });
 
 console.log('Background loaded!');
 console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
+console.log("skibidi sigma rizzler");
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   switch (message.type) {
