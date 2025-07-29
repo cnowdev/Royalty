@@ -31,6 +31,7 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
 
         for (const [index, code] of codes.entries()) {
             const progress = Math.round(((index + 1) / codes.length) * 100);
+
             
             chrome.runtime.sendMessage({
                 type: 'AUTOAPPLY_TESTING',

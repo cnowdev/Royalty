@@ -24,7 +24,6 @@ exampleThemeStorage.get().then(theme => {
 
 console.log('Background loaded!');
 console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
-console.log("skibidi sigma rizzler");
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   console.log('Received message in background:', message);
@@ -75,21 +74,22 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       return;
 
     // updates to content-ui about the current state of auto-apply
+
+    //using absolutes here might be risky, but it should work for now
     case 'AUTOAPPLY_TESTING':
-      console.log("HII2!");
       if (message.payload) {
-      
-        handleTestingUpdate(message);
+        console.log('tabid', sender.tab!.id);
+        handleTestingUpdate(message, sender.tab!.id!);
       }
       break;
 
     case 'AUTOAPPLY_ERROR':
-      handleErrorUpdate()
+      handleErrorUpdate(sender.tab!.id!)
       break;
 
     case 'AUTOAPPLY_COMPLETE':
       if(message.payload) {
-        handleCompleteUpdate(message);
+        handleCompleteUpdate(message, sender.tab!.id!);
       }
       break;
   }
@@ -184,16 +184,10 @@ const handleAutoApply = async (coupons:Coupon[]) => {
 };
 
 
-const handleTestingUpdate = async (message: any) => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  if (!tab?.id || !tab.url) {
-    console.error("No active tab with URL found for auto-apply.");
-    return;
-  }
+const handleTestingUpdate = async (message: any, tabID: number) => {
 
   chrome.tabs.sendMessage(
-    tab.id,
+    tabID,
     {
       type: 'AUTOAPPLY_TESTING',
       payload: {
@@ -203,32 +197,21 @@ const handleTestingUpdate = async (message: any) => {
   );
 }
 
-const handleErrorUpdate = async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+const handleErrorUpdate = async (tabID: number) => {
 
-  if (!tab?.id || !tab.url) {
-    console.error("No active tab with URL found for auto-apply.");
-    return;
-  }
 
   chrome.tabs.sendMessage(
-    tab.id,
+    tabID,
     {
       type: "AUTOAPPLY_ERROR",
     }
   )
 }
 
-const handleCompleteUpdate = async (message: any) => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  if (!tab?.id || !tab.url) {
-    console.error("No active tab with URL found for auto-apply.");
-    return;
-  }
+const handleCompleteUpdate = async (message: any, tabID: number)  => {
 
   chrome.tabs.sendMessage(
-    tab.id,
+    tabID,
     {
       type: 'AUTOAPPLY_COMPLETE',
       payload: {
