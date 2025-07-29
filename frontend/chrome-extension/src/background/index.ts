@@ -36,6 +36,8 @@ console.log('Background loaded!');
 console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  console.log('Received message in background:', message);
+
   switch (message.type) {
     case 'OPEN_SIDE_PANEL':
       chrome.tabs.query({ active: true, currentWindow: true, lastFocusedWindow: true }, (tabs) => {
@@ -80,6 +82,25 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
     default:
       return;
+
+    // updates to content-ui about the current state of auto-apply
+    case 'AUTOAPPLY_TESTING':
+      console.log("HII2!");
+      if (message.payload) {
+      
+        handleTestingUpdate(message);
+      }
+      break;
+
+    case 'AUTOAPPLY_ERROR':
+      handleErrorUpdate()
+      break;
+
+    case 'AUTOAPPLY_COMPLETE':
+      if(message.payload) {
+        handleCompleteUpdate(message);
+      }
+      break;
   }
 
   return true;
@@ -170,4 +191,59 @@ const handleAutoApply = async (coupons:Coupon[]) => {
     console.error("Failed to inject script or send message:", err);
   }
 };
+
+
+const handleTestingUpdate = async (message: any) => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  if (!tab?.id || !tab.url) {
+    console.error("No active tab with URL found for auto-apply.");
+    return;
+  }
+
+  chrome.tabs.sendMessage(
+    tab.id,
+    {
+      type: 'AUTOAPPLY_TESTING',
+      payload: {
+        ...message.payload
+      }
+    }
+  );
+}
+
+const handleErrorUpdate = async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  if (!tab?.id || !tab.url) {
+    console.error("No active tab with URL found for auto-apply.");
+    return;
+  }
+
+  chrome.tabs.sendMessage(
+    tab.id,
+    {
+      type: "AUTOAPPLY_ERROR",
+    }
+  )
+}
+
+const handleCompleteUpdate = async (message: any) => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  if (!tab?.id || !tab.url) {
+    console.error("No active tab with URL found for auto-apply.");
+    return;
+  }
+
+  chrome.tabs.sendMessage(
+    tab.id,
+    {
+      type: 'AUTOAPPLY_COMPLETE',
+      payload: {
+        ...message.payload
+      }
+    }
+  );
+}
 

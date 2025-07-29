@@ -7,6 +7,7 @@ declare global {
 export interface SiteConfig {
     inputSelector: string;
     submitSelector: string;
+    subtotalSelector?: string;
     successSelector?: string;
     errorSelector?: string;
     waitMs?: number;

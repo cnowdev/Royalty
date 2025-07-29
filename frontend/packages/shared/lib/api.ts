@@ -32,7 +32,7 @@ class API {
     }
 
     /**
-     * Method that searches for coupons
+     * Method that searches for coupons and caches them
      * 
      * @param query The search query for coupons. This should be the domain of the website
      * @param sort_by The sorting method for the coupons. Can be 'newest', 'oldest', 'high_score', or 'low_score'

@@ -44,3 +44,29 @@ export function checkResult(config: SiteConfig): 'SUCCESS' | 'ERROR' | 'UNKNOWN'
     console.log("[AutoApply] Could not determine result from configured selectors.");
     return 'UNKNOWN';
 }
+
+export function checkPrice(config: SiteConfig): number {
+    const subtotalElementTextContent = document.querySelector<HTMLElement>(config.subtotalSelector!)?.textContent;
+    if (!subtotalElementTextContent) {
+        throw new Error(`Subtotal element not found for selector: ${config.subtotalSelector}`);
+    }
+
+    const currentPrice = parseFloat(subtotalElementTextContent.replace(/[^0-9.-]+/g, ''));
+    return parseFloat(currentPrice.toFixed(2));
+}
+
+export async function attemptCode(code: string, config: SiteConfig): Promise<void> {
+    console.log(`[AutoApply] Attempting code: ${code}`);
+    const inputField = document.querySelector<HTMLInputElement>(config.inputSelector);
+    const submitButton = document.querySelector<HTMLButtonElement>(config.submitSelector);
+
+    if (!inputField || !submitButton || !isElementUsable(inputField)) {
+        console.error(`[AutoApply] Input or submit button not found for selectors: ${config.inputSelector}, ${config.submitSelector}`);
+        throw new Error(`Input or submit button not found for selectors: ${config.inputSelector}, ${config.submitSelector}`);
+    }
+
+    setInputValue(inputField, code);
+    await delay(150);
+    clickElement(submitButton);
+}
+
