@@ -53,16 +53,6 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
             if (resultStatus === 'SUCCESS') {
                 console.log(`[AutoApply] Success: ${code}`);
                 sendResponse({ success: true, appliedCode: code, message: `Successfully applied: ${code}` });
-
-                if(config.subtotalSelector) {
-                    const priceAfter = checkPrice(config);
-                    console.log('Price after applying code:', priceAfter);
-                    if(priceAfter < priceBefore && (priceBefore - priceAfter  > bestSavings)) {
-                        bestSavings = parseFloat((priceBefore - priceAfter).toFixed(2));
-                        bestCode = code;
-                    }
-                }
-
             } else if (resultStatus === 'ERROR') {
                 console.log(`[AutoApply] Error detected for: ${code}`);
                 if (config.clearInputOnError) {
@@ -72,6 +62,15 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
                 }
             } else {
                 console.log(`[AutoApply] Result unknown for: ${code}. Continuing...`);
+            }
+
+            if(config.subtotalSelector) {
+                const priceAfter = checkPrice(config);
+                console.log('Price after applying code:', priceAfter);
+                if(priceAfter < priceBefore && (priceBefore - priceAfter  > bestSavings)) {
+                    bestSavings = parseFloat((priceBefore - priceAfter).toFixed(2));
+                    bestCode = code;
+                }
             }
 
             await delay(300);

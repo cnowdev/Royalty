@@ -13,7 +13,6 @@ interface AutoApplyModalProps {
 
 const AutoApplyModal: React.FC<AutoApplyModalProps> = ({ isOpen, onClose, currentStep, currentCoupon, progress, finalSavings }: AutoApplyModalProps) => {
 
-
   const steps = {
     [AutoApplyStep.TESTING]: "Testing coupon codes...",
     [AutoApplyStep.ERROR]: "Something went wrong...",
@@ -26,11 +25,10 @@ const AutoApplyModal: React.FC<AutoApplyModalProps> = ({ isOpen, onClose, curren
 
   if (!isOpen) return null;
 
-
   return (
     <div 
       className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[10000]"
-      onClick={currentStep == AutoApplyStep.COMPLETE? onClose : undefined}
+      onClick={currentStep == AutoApplyStep.COMPLETE || currentStep == AutoApplyStep.ERROR ? onClose : undefined}
     >
       <div
         className="bg-background rounded-xl shadow-2xl max-w-lg w-[90%] relative"
@@ -38,16 +36,7 @@ const AutoApplyModal: React.FC<AutoApplyModalProps> = ({ isOpen, onClose, curren
       >
         {/* Header */}
         <div className="px-8 py-6 text-center">
-          {currentStep != AutoApplyStep.COMPLETE ? (
-            <>
-              <h2 className="text-2xl font-bold text-white mb-2">
-                Royalty is finding you the best deals
-              </h2>
-              <p className="text-gray-400 text-lg">
-                {steps[currentStep!] || 'idk how we got here'}
-              </p>
-            </>
-          ) : (
+          {currentStep == AutoApplyStep.COMPLETE ? (
             <>
               {finalSavings > 0 ? (
                 <>
@@ -69,12 +58,46 @@ const AutoApplyModal: React.FC<AutoApplyModalProps> = ({ isOpen, onClose, curren
                 </>
               )}
             </>
+          ) : currentStep == AutoApplyStep.ERROR ? (
+            <>
+              <h2 className="text-2xl font-bold text-red-400 mb-2">
+                Oops! Something went wrong
+              </h2>
+              <p className="text-gray-400 text-lg">
+                Royalty encountered an error while trying to apply coupons
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Royalty is finding you the best deals
+              </h2>
+              <p className="text-gray-400 text-lg">
+                {steps[currentStep!] || 'idk how we got here'}
+              </p>
+            </>
           )}
         </div>
 
         {/* Content */}
         <div className="px-8 pb-8">
-          {currentStep != AutoApplyStep.COMPLETE ? (
+          {currentStep == AutoApplyStep.COMPLETE || currentStep == AutoApplyStep.ERROR ? (
+            <>
+              {/* Completion/Error Actions */}
+              <div className="flex justify-center">
+                <button 
+                  onClick={onClose}
+                  className={`font-medium py-3 px-8 rounded-lg transition-colors ${
+                    currentStep == AutoApplyStep.ERROR 
+                      ? 'bg-red-600 hover:bg-red-700 text-white' 
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
+                >
+                  {currentStep == AutoApplyStep.ERROR ? 'Try Again' : 'Proceed'}
+                </button>
+              </div>
+            </>
+          ) : (
             <>
               {/* Progress Bar */}
               <div className="mb-6">
@@ -96,18 +119,6 @@ const AutoApplyModal: React.FC<AutoApplyModalProps> = ({ isOpen, onClose, curren
                   </div>
                 </div>
               )}
-            </>
-          ) : (
-            <>
-              {/* Completion Actions */}
-              <div className="flex justify-center">
-                <button 
-                  onClick={onClose}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-colors"
-                >
-                  Proceed
-                </button>
-              </div>
             </>
           )}
         </div>
