@@ -71,7 +71,7 @@ export const prepareSiteForAutoApply = async (domain: string, config: SiteConfig
         }
 
         default:
-            throw new Error(`Unsupported domain: ${domain}`);
+            console.log('No specific preparation needed for this domain:', domain);
             break;
     }
 };
