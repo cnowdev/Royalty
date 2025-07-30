@@ -67,7 +67,7 @@ export default function App() {
 
   return (
     <>
-      {showMessage && (
+      {(showMessage && currentStep == null) && (
         <RoyaltyMessage onClose={() => setShowMessage(false)} onApply={handleApply} />
       )}
       {showButton && <RoyaltyButton />}
