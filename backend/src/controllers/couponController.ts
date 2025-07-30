@@ -9,18 +9,19 @@ export const searchCoupons = async (req: Request, res: Response, next: NextFunct
             throw new Error("missing fields");
         }
 
-        const response = await prisma.coupon.findMany({
-            where: {
-                retailerUrl: retailerUrl as string,
-                expirationDate: {
-                    gte: new Date(),
-                }
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
-            take: parseInt(limit as string, 10) || 10,
-        })
+    const response = await prisma.coupon.findMany({
+        where: {
+            retailerUrl: retailerUrl as string,
+            OR: [
+                { expirationDate: null },
+                { expirationDate: { gte: new Date() } }
+            ]
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: parseInt(limit as string, 10) || 10,
+    });
 
         res.json(response);
 
