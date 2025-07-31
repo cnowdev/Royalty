@@ -4,7 +4,9 @@
   "description": "the backend for the royalty extension",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon -r tsconfig-paths/register src/server.ts"
+    "dev": "nodemon -r tsconfig-paths/register src/server.ts",
+    "build": "pnpm prisma generate && tsc && tsc-alias && copyfiles prisma/schema.prisma \"assets/**/*\" \"generated/**/*\" dist",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
-    "prisma": "^6.5.0"
+    "copyfiles": "^2.4.1",
+    "prisma": "^6.5.0",
+    "tsc-alias": "^1.8.16"
   }
 }
