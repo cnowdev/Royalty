@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-
+import  { autoApplyProductURLs, productURLs } from '@extension/shared'
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
 
 /**
@@ -17,6 +17,18 @@ const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
  * @prop content_scripts
  * css: ['content.css'], // public folder
  */
+
+const checkoutUrls = [
+  ...autoApplyProductURLs.map(url => {
+    const domain = url.split('/')[0];
+    return `*://${domain}/*`;
+  }),
+  ...productURLs.map(url => {
+    const domain = url.split(/[*/]/)[0];
+    return `*://www.${domain}/*`;
+  })
+];
+
 const manifest = {
   manifest_version: 3,
   default_locale: 'en',
@@ -29,8 +41,8 @@ const manifest = {
   },
   version: packageJson.version,
   description: '__MSG_extensionDescription__',
-  host_permissions: ['<all_urls>'],
-  permissions: ['storage', 'scripting', 'tabs', 'sidePanel', 'activeTab'],
+  host_permissions: checkoutUrls,
+  permissions: ['storage', 'scripting', 'tabs', 'sidePanel'],
   background: {
     service_worker: 'background.js',
     type: 'module',
@@ -44,11 +56,11 @@ const manifest = {
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+      matches: checkoutUrls,
       js: ['content-ui/index.iife.js'],
     },
     {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+      matches: checkoutUrls,
       css: ['content.css'],
     },
   ],
