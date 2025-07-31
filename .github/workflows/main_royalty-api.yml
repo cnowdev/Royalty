@@ -68,4 +68,3 @@ jobs:
           app-name: 'royalty-api'
           slot-name: 'Production'
           package: . # Deploys the content of the downloaded artifact
-          respect-gitignore: false
