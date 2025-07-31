@@ -54,7 +54,10 @@ export default function RetailerProductCard({ retailerProduct, isLight, currentP
           {displayLogo}
 
           <div className="flex-1 min-w-0">
-            <div className={`text-lg font-semibold ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
+            <div
+              className={`text-lg font-semibold truncate ${isLight ? 'text-gray-900' : 'text-gray-100'}`}
+              title={getRetailerDisplayName(retailerName)}
+            >
               {getRetailerDisplayName(retailerName)}
             </div>
           </div>
@@ -72,6 +75,5 @@ export default function RetailerProductCard({ retailerProduct, isLight, currentP
         </div>
       }
     </>
-
   );
 }

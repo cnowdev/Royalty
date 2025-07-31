@@ -247,18 +247,18 @@ const getRelatedProductsFromObjectID = async (objectID: string): Promise<any> =>
  * @param url
  */
 const getPriceComProductFromURL = async (url: string): Promise<any | null> => {
-    //https://matchos.price.com/apiv2/item?partner=5b960a4ade2962062eeb1f4a&url=https%3A%2F%2Fwww.amazon.com%2Fdp%2FB07RBBCZZ1%3Ftag%3Dsnx639-20%26th%3D1
+    const cleanedUrl = url.replace(/\/+$/, '');
 
     const params = new URLSearchParams({
         partner: '5b960a4ade2962062eeb1f4a',
-        url: url as string,
+        url: cleanedUrl,
     });
 
     const response = await fetch(`${priceComAPIURL}/item?${params.toString()}`, {
         method: 'GET'
     }).then(response => response.json());
 
-    if(!response || response.length === 0 || !response[0].ObjectId) {
+    if (!response || response.length === 0 || !response[0].ObjectId) {
         throw new Error("No objectID found in response");
     }
 
