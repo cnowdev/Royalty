@@ -31,8 +31,6 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
                 createdAt: 'desc',
             }
         });
-        
-        console.log('hello');
 
         //if no retailerProduct is found, or the data is stale, create or update the product using the productURL
         if(!retailerProduct || retailerProduct.createdAt.getTime() < Date.now() - 1000 * 60 * 60 * 12) {
@@ -50,6 +48,9 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
                 include: {
                     product: true,
                 },
+                orderBy: {
+                    createdAt: 'desc',
+                }
             });
 
 
