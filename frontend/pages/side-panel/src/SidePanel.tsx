@@ -122,6 +122,18 @@ const SidePanel = () => {
       legend: { display: true },
       tooltip: { enabled: true },
     },
+    scales: {
+      y: {
+        ticks: {
+          callback: function(tickValue: string | number, index: number, ticks: any) {
+            if (typeof tickValue === 'number') {
+              return `$${tickValue.toFixed(2)}`;
+            }
+            return `$${tickValue}`;
+          },
+        },
+      },
+    },
   };
 
   return (
@@ -149,9 +161,9 @@ const SidePanel = () => {
           <div className="space-y-6">
             {/* Product Title and Image */}
             <div className="flex items-center gap-3">
-              <img 
-                src={currentProduct.imageUrl || chrome.runtime.getURL("content-ui/Royalty-Icon.svg")} 
-                alt={currentProduct.name || 'Product Image'} 
+              <img
+                src={currentProduct.imageUrl || chrome.runtime.getURL("content-ui/Royalty-Icon.svg")}
+                alt={currentProduct.name || 'Product Image'}
                 className="w-16 h-16 object-cover rounded"
               />
               <div>
@@ -196,25 +208,25 @@ const SidePanel = () => {
             </div>
             <div className={`grid grid-cols-3 gap-3 text-center`}>
               <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
-              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
                 <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
-                ${Number(currentProduct.price).toFixed(2)}
+                  ${Number(currentProduct.price).toFixed(2)}
                 </p>
               </div>
               <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
-              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
-              <p className={`text-lg font-bold text-green-500`}>
-                ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
-              </p>
-              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
-                {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
-              </p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
+                <p className={`text-lg font-bold text-green-500`}>
+                  ${Math.min(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+                </p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
+                  {priceHistory.find((entry) => entry.price === Math.min(...priceHistory.map((e) => e.price)))?.date || ''}
+                </p>
               </div>
               <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
-              <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
-              <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
-                ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
-              </p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
+                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
+                  ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+                </p>
               </div>
             </div>
 
@@ -224,7 +236,7 @@ const SidePanel = () => {
                 All Retailers
               </h3>
               <div className="space-y-3">
-                {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight} currentProduct={currentProduct}/>)}
+                {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight} currentProduct={currentProduct} />)}
               </div>
             </div>
           </div>
