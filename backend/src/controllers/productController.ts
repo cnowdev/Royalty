@@ -27,6 +27,9 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
             include: {
                 product: true,
             },
+            orderBy: {
+                createdAt: 'desc',
+            }
         });
         
         console.log('hello');

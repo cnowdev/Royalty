@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export default function RoyaltyMessage({
   onClose,
   onApply,
@@ -5,8 +7,22 @@ export default function RoyaltyMessage({
   onClose: () => void;
   onApply: () => void;
 }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="fixed top-5 right-5 z-[9999]">
+    <div
+      className={`fixed top-5 right-5 z-[9999] transition-transform duration-750 ${
+        isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      }`}
+    >
       <div className="relative w-[340px] bg-background text-foreground p-5 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.12)] text-[14px] leading-[150%]">
         <button
           className="absolute top-2 right-2 bg-none border-none text-muted font-bold text-[16px] cursor-pointer"

@@ -6,7 +6,7 @@ export const siteConfigs: Record<string, SiteConfig> = {
         submitSelector: "button[data-testid=promo-code-submit]",
         successSelector: ".e8i0p5k0",
         errorSelector: ".egb3lhk0",
-        subtotalSelector: '#__next > main > div > form > div > div.gamut-1m8kivo-StyledColumn.e1y0e4q30 > div > div > div.e1n1w96r1.gamut-1msgnpw-StyledColumn.e1y0e4q30 > div.gamut-1e7wabp-Box.ebnwbv90 > div > div:nth-child(9) > span.gamut-1b6673s-StyledText.e8i0p5k0',
+        subtotalSelector: 'span[data-testid=total-today]',
         waitMs: 750,
     },
     "target.com": {
@@ -38,7 +38,7 @@ export const siteConfigs: Record<string, SiteConfig> = {
         submitSelector: "button[formid=promo-code]",
         successSelector: ".e8i0p5k0",
         errorSelector: ".conpon-error-item",
-        subtotalSelector: 'chakra-text css-i03nug',
+        subtotalSelector: '#subtotal > p.chakra-text.css-i03nug',
         waitMs: 750,
     },
     "skillshare.com": {
