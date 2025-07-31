@@ -54,12 +54,12 @@ const SidePanel = () => {
       try {
         // Replace with the actual product URL or object ID
         const productURL = await getCurrentTab(); // Use the current URL
-        console.log('Product URL:', productURL);
+
         const retailerProduct = await APIClient.getRetailerProduct(productURL);
-        console.log('Retailer Product:', retailerProduct.product);
+
         // Fetch related products using the object ID
         const relatedProducts = await APIClient.getRelatedProducts(retailerProduct.product.objectId);
-        console.log('Related Products:', relatedProducts);
+
         // Set the current product and related retailers
         setCurrentProduct(retailerProduct);
         setRetailers(relatedProducts);
@@ -80,8 +80,6 @@ const SidePanel = () => {
           priceHistoryData.push({ date: today, price: lastPrice });
         }
 
-        console.log("Retailer name: ", retailerProduct.retailerName);
-        console.log('Price History Data:', priceHistoryData);
         setPriceHistory(priceHistoryData);
       } catch (err: any) {
         console.error('Error fetching retailers:', err);
@@ -95,7 +93,6 @@ const SidePanel = () => {
 
     const handleTabUpdate = (tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
       if (changeInfo.url) {
-        console.log('URL changed:', changeInfo.url);
         window.close(); // Close the side panel when the URL changes
       }
     };

@@ -27,8 +27,6 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
         await prepareSiteForAutoApply(domain, config);
         priceBefore = checkPrice(config);
 
-        console.log('Price before applying codes:', priceBefore);
-
         for (const [index, code] of codes.entries()) {
             const progress = Math.round(((index + 1) / codes.length) * 100);
 
@@ -46,13 +44,11 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
             await attemptCode(code, config);
 
             const waitTime = config.waitMs || 2000;
-            console.log(`[AutoApply] Waiting ${waitTime}ms...`);
             await delay(waitTime);
 
             const resultStatus = checkResult(config);
 
             if (resultStatus === 'SUCCESS') {
-                console.log(`[AutoApply] Success: ${code}`);
                 sendResponse({ success: true, appliedCode: code, message: `Successfully applied: ${code}` });
             } else if (resultStatus === 'ERROR') {
                 console.log(`[AutoApply] Error detected for: ${code}`);
@@ -67,7 +63,6 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
 
             if(config.subtotalSelector) {
                 const priceAfter = checkPrice(config);
-                console.log('Price after applying code:', priceAfter);
                 if(priceAfter < priceBefore && (priceBefore - priceAfter  > bestSavings)) {
                     bestSavings = parseFloat((priceBefore - priceAfter).toFixed(2));
                     bestCode = code;
@@ -85,7 +80,6 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
             }
         })
 
-        console.log("[AutoApply] All codes tried, none confirmed successful.");
         sendResponse({ success: false, message: "NO_CODES" })
     } catch (error: any) {
         console.error("[AutoApply] Error during auto-apply process:", error);
@@ -118,7 +112,6 @@ async function attemptApplyForSite(domain: string, codes: string[], sendResponse
 export function autoApply(request: RequestPayload, sendResponse: (response: any) => void) {
     // Implementation of the autoApply function
 
-    console.log('[AutoApply] Message received:', request);
 
     if (!request.payload?.domain || !request.payload?.codes) {
         console.error("[AutoApply] Invalid payload:", request.payload);

@@ -44,7 +44,6 @@ class API {
 
         if(cache[query] && cache[query].timestamp > Date.now() - 5 * 60 * 1000 && cache[query].data.length > 0) { // Cache for 5 minutes
             console.log(`Returning cached coupons for query: ${query}`);
-            console.log("cached data", cache[query].data);
             return cache[query].data;
         }
         const params = new URLSearchParams({
@@ -66,7 +65,6 @@ class API {
             throw new Error(`No coupons found for: ${query}`);
         }
 
-        console.log(cache);
         cache[query] = {
             data: response,
             timestamp: Date.now() // Update the timestamp to the current time

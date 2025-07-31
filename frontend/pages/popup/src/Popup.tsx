@@ -36,7 +36,6 @@ const Popup = () => {
       try {
         const currentURL = await getCurrentTab().then(url => getDomain(url));
         setCurrentURL(await getCurrentTab());
-        console.log("Current URL: " + currentURL)
         const validTLDs = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.co', '.us', '.uk', '.ca', '.au', '.in'];
         const hasValidTLD = validTLDs.some(tld => currentURL.endsWith(tld));
         if (!hasValidTLD) {
@@ -57,7 +56,6 @@ const Popup = () => {
             setIsLoading(false);
             return;
           }
-          console.log("Retailer Name: ", firstCoupon.retailerName);
 
           setMerchantName(
             (firstCoupon.retailerName?.charAt(0).toUpperCase() + firstCoupon.retailerName?.slice(1).replace(' Coupons', '') + ' Coupons') || 'Available Coupons'
@@ -93,7 +91,6 @@ const Popup = () => {
   };
 
   const handleAutoApply = async () => {
-    console.log(coupons)
     if (!coupons || coupons.length === 0) return;
 
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -139,7 +136,6 @@ const Popup = () => {
             console.error("Auto-apply message error:", chrome.runtime.lastError.message);
             setApplyStatus('Something went wrong. Could not apply any codes.');
           } else if (response) {
-            console.log("Auto-apply response:", response);
             if (response.success) {
               setApplyStatus(`Success! Applied code: ${response.appliedCode}`);
               // Maybe refresh coupons display or indicate success visually
@@ -162,7 +158,6 @@ const Popup = () => {
   };
 
   const openPanel = async () => {
-    console.log("Here");
     chrome.runtime.sendMessage({ type: 'OPEN_SIDE_PANEL' }, (response) => {
       if (chrome.runtime.lastError) {
         console.error('Error sending message:', chrome.runtime.lastError.message);

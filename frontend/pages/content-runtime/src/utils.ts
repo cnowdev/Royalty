@@ -36,7 +36,6 @@ export function checkResult(config: SiteConfig): 'SUCCESS' | 'ERROR' | 'UNKNOWN'
     if (config.successSelector) {
         const successElement = document.querySelector(config.successSelector);
         if (successElement && isElementUsable(successElement as HTMLElement)) {
-            console.log("[AutoApply] Detected success indicator:", successElement.textContent);
             return 'SUCCESS';
         }
     }
@@ -56,7 +55,6 @@ export function checkPrice(config: SiteConfig): number {
 }
 
 export async function attemptCode(code: string, config: SiteConfig): Promise<void> {
-    console.log(`[AutoApply] Attempting code: ${code}`);
     const inputField = document.querySelector<HTMLInputElement>(config.inputSelector);
     const submitButton = document.querySelector<HTMLButtonElement>(config.submitSelector);
 

@@ -31,7 +31,6 @@ const manifest = {
   description: '__MSG_extensionDescription__',
   host_permissions: ['<all_urls>'],
   permissions: ['storage', 'scripting', 'tabs', 'notifications', 'sidePanel', 'activeTab'],
-  options_page: 'options/index.html',
   background: {
     service_worker: 'background.js',
     type: 'module',
@@ -41,7 +40,7 @@ const manifest = {
     default_icon: 'icon-34.png',
   },
   icons: {
-    128: 'icon-128.png',
+    '128': 'icon-128.png',
   },
   content_scripts: [
     {

@@ -8,20 +8,6 @@ exampleThemeStorage.get().then(theme => {
   console.log('theme', theme);
 });
 
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//   if (changeInfo.url) {
-//     (async () => {
-//       console.log("Before coupon fetch");
-//       try {
-//         const coupons = await fetchCoupons();
-//         console.log("coupons: ", coupons);
-//       } catch (error) {
-//         console.error("Error fetching coupons:", error);
-//       }
-//     })();
-//   }
-// });
-
 console.log('Background loaded!');
 console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
 
@@ -56,7 +42,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       break;
 
     case 'AUTO_APPLY_BUTTON_CLICKED':
-      //sendResponse({ success: true });
       const coupons = await fetchCoupons()
       
       if(!coupons || coupons.length === 0) {
@@ -101,7 +86,6 @@ const fetchCoupons = async () => {
   let coupons: Coupon[] = [];
   try {
     const currentURL = await getCurrentTab().then(url => getDomain(url));
-    console.log("Current URL: " + currentURL)
     const validTLDs = ['.com', '.org', '.net', '.edu', '.gov', '.io', '.co', '.us', '.uk', '.ca', '.au', '.in'];
     const hasValidTLD = validTLDs.some(tld => currentURL.endsWith(tld));
     if (!hasValidTLD) {
@@ -166,7 +150,6 @@ const handleAutoApply = async (coupons:Coupon[]) => {
         if (chrome.runtime.lastError) {
           return false;
         } else if (response) {
-          console.log("Auto-apply response:", response);
           if (response.success) {
             return true;
           } else {

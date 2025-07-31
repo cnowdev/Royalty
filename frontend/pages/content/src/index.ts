@@ -1,10 +1,10 @@
-console.log('content script loaded');
+
 
 (function monitorAmazonProductPage() {
     let lastCheckedUrl: string | null = localStorage.getItem('lastCheckedUrl');
     let isRedirecting = false;
 
-    console.log('Last checked URL:', lastCheckedUrl); 
+
 
     function isAmazonProductPage(url: string): boolean {
         const amazonProductRegex = /^https:\/\/www\.amazon\.com.*\/dp\/[A-Z0-9]{10}/;
@@ -28,7 +28,7 @@ console.log('content script loaded');
     }
 
     function redirectToAffiliateUrl(currentUrl: string): void {
-        //const redirectUrl = `https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01JMFKP5KS1ZX7V005ZC1NCWRD&url=${encodeURIComponent(currentUrl)}`;
+
         const redirectUrl = currentUrl;
         alert('Redirecting to affiliate URL: ' + redirectUrl);
         isRedirecting = true;

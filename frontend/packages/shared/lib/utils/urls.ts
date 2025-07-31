@@ -28,7 +28,6 @@ export function matchesProductURL(url: string): boolean {
         pattern.replace(/\*/g, ".*").replace(/\//g, "\\/"),
         "i"
       );
-      console.log("Regex pattern:", regex);
       return regex.test(url);
     });
 }
