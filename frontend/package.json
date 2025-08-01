@@ -1,13 +1,13 @@
 {
-  "name": "chrome-extension-boilerplate-react-vite",
-  "version": "0.1.0",
-  "description": "chrome extension boilerplate",
-  "license": "MIT",
+  "name": "royalty",
+  "version": "1.0.0",
+  "description": "open source shopping asistant",
+  "license": "CC BY-NC-ND 4.0",
   "private": true,
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite.git"
+    "url": "https://github.com/cnowdev/royalty-frontend"
   },
   "type": "module",
   "scripts": {
