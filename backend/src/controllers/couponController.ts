@@ -1,13 +1,9 @@
 import prisma from '@/lib/prismaClient';
+import { hmacHandler } from '@/middlewares/hmacHandler';
 import { Request, Response, NextFunction } from 'express';
-import { verifySha256Hash } from '@/hmac';
 
 export const searchCoupons = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string))
     try {
-        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
-            throw new Error("Not authorized");
-        }
         const { retailerUrl, limit } = req.query;
 
         if (!retailerUrl || !limit) {

@@ -1,5 +1,6 @@
 import express from 'express';
 import { errorHandler } from './middlewares/errorHandler';
+import { hmacHandler } from './middlewares/hmacHandler';
 import couponRoutes from './routes/couponRoutes'
 import productRoutes from './routes/productRoutes'
 import cors from 'cors';
@@ -7,6 +8,8 @@ import cors from 'cors';
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use(hmacHandler);
 
 app.get('/', (req: any, res: { send: (arg0: string) => void; }) => {
     res.send('Hello, world!!');
@@ -17,6 +20,5 @@ app.use('/products', productRoutes);
 app.use('/assets', express.static('assets'));
 
 app.use(errorHandler);
-
 
 export default app;

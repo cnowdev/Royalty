@@ -1,12 +1,8 @@
 import { Request, Response, NextFunction, response } from 'express';
 import prisma from '@/lib/prismaClient';
-import { verifySha256Hash } from '@/hmac';
 
 export const getRetailerProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
-            throw new Error("Not authorized");
-        }
         const { productURL } = req.query;
 
         const response = await getPriceComProductFromURL(productURL as string);
@@ -75,9 +71,6 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
 
 export const getRetailerProductPricingData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
-            throw new Error("Not authorized");
-        }
         const { retailerName, retailerProductID } = req.query;
 
         if (!retailerName || typeof retailerName !== 'string' || !retailerProductID) {
@@ -106,9 +99,6 @@ export const getRetailerProductPricingData = async (req: Request, res: Response,
 
 export const getRelatedProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
-            throw new Error("Not authorized");
-        }
         const { objectId } = req.query;
 
         if (!objectId || typeof objectId !== 'string') {
@@ -147,9 +137,6 @@ export const getRelatedProducts = async (req: Request, res: Response, next: Next
 
 export const getRelatedProductsByProductID = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
-            throw new Error("Not authorized");
-        }
         const { productId } = req.query;
 
         if (!productId || typeof productId !== 'string') {

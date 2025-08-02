@@ -10,10 +10,10 @@ class API {
     private baseUrl: string = process.env.IS_PROD? process.env.CEB_PROD_API_URL! : process.env.CEB_DEV_API_URL!;
 
     private async baseFetch(url: string, method: string = 'GET', body?: any): Promise<any> {
-        const randomString = Math.random().toString(36).substring(2, 15);
+        const unixTimestamp = Date.now().toString();
 
         const apiKey = process.env.CEB_API_KEY || '';
-        const appendedString = apiKey + randomString;
+        const appendedString = apiKey + unixTimestamp;
         const encoder = new TextEncoder();
         const data = encoder.encode(appendedString);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -23,10 +23,10 @@ class API {
         const options: RequestInit = {
             method,
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'x-random-string': randomString,
-                'x-hashed-api-key': hashHex,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-random-string': unixTimestamp,
+            'x-hashed-api-key': hashHex,
             },
         };
 
