@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
     "build": "pnpm prisma generate && tsc && tsc-alias && copyfiles prisma/schema.prisma \"assets/**/*\" \"generated/**/*\" dist",
-    "start": "node dist/server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
