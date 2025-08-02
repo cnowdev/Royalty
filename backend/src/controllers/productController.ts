@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction, response } from 'express';
 import prisma from '@/lib/prismaClient';
+import { verifySha256Hash } from '@/hmac';
 
 export const getRetailerProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
+            throw new Error("Not authorized");
+        }
         const { productURL } = req.query;
 
         const response = await getPriceComProductFromURL(productURL as string);
-        if(!response) throw new Error("No product found for URL");
+        if (!response) throw new Error("No product found for URL");
 
         console.log("Price.com response: ", response);
 
@@ -14,12 +18,12 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
         const retailerName = response.retailer;
         const retailerProductID = response.productIdentifier.sku;
 
-        
 
-        if(!retailerName || !retailerProductID || typeof retailerName !== 'string' || typeof retailerProductID !== 'string') {
+
+        if (!retailerName || !retailerProductID || typeof retailerName !== 'string' || typeof retailerProductID !== 'string') {
             throw new Error("Invalid retailerName or retailerProductID");
         }
-    
+
         const retailerProduct = await prisma.retailerProduct.findFirst({
             where: {
                 retailerName: retailerName, retailerProductId: retailerProductID
@@ -33,11 +37,11 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
         });
 
         //if no retailerProduct is found, or the data is stale, create or update the product using the productURL
-        if(!retailerProduct || retailerProduct.createdAt.getTime() < Date.now() - 1000 * 60 * 60 * 12) {
-            if(!productURL) throw new Error("No retailer product found and no product URL provided");
+        if (!retailerProduct || retailerProduct.createdAt.getTime() < Date.now() - 1000 * 60 * 60 * 12) {
+            if (!productURL) throw new Error("No retailer product found and no product URL provided");
 
             const objectID = response.ObjectId
-            if(!objectID) throw new Error("No objectID found for product URL");
+            if (!objectID) throw new Error("No objectID found for product URL");
 
             await createOrUpdateProduct(objectID);
 
@@ -66,11 +70,14 @@ export const getRetailerProduct = async (req: Request, res: Response, next: Next
     } catch (error) {
         next(error);
     }
-    
+
 }
 
 export const getRetailerProductPricingData = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
+            throw new Error("Not authorized");
+        }
         const { retailerName, retailerProductID } = req.query;
 
         if (!retailerName || typeof retailerName !== 'string' || !retailerProductID) {
@@ -99,6 +106,9 @@ export const getRetailerProductPricingData = async (req: Request, res: Response,
 
 export const getRelatedProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
+            throw new Error("Not authorized");
+        }
         const { objectId } = req.query;
 
         if (!objectId || typeof objectId !== 'string') {
@@ -121,7 +131,7 @@ export const getRelatedProducts = async (req: Request, res: Response, next: Next
             product.retailerProducts.reduce((acc, retailerProduct) => {
                 const retailerName = retailerProduct.retailerName;
                 if (
-                    !acc[retailerName] || 
+                    !acc[retailerName] ||
                     new Date(retailerProduct.createdAt).getTime() > new Date(acc[retailerName].createdAt).getTime()
                 ) {
                     acc[retailerName] = retailerProduct;
@@ -137,6 +147,9 @@ export const getRelatedProducts = async (req: Request, res: Response, next: Next
 
 export const getRelatedProductsByProductID = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!verifySha256Hash(req.headers["x-hashed-api-key"] as string, process.env.CEB_API_KEY || '', req.headers["x-random-string"] as string)) {
+            throw new Error("Not authorized");
+        }
         const { productId } = req.query;
 
         if (!productId || typeof productId !== 'string') {
@@ -159,7 +172,7 @@ export const getRelatedProductsByProductID = async (req: Request, res: Response,
             product.retailerProducts.reduce((acc, retailerProduct) => {
                 const retailerName = retailerProduct.retailerName;
                 if (
-                    !acc[retailerName] || 
+                    !acc[retailerName] ||
                     new Date(retailerProduct.createdAt).getTime() > new Date(acc[retailerName].createdAt).getTime()
                 ) {
                     acc[retailerName] = retailerProduct;
@@ -196,11 +209,11 @@ const createOrUpdateProduct = async (objectID: string): Promise<void> => {
         }
     });
 
-    await Promise.all(matches.flatMap(async(match: any) => {
+    await Promise.all(matches.flatMap(async (match: any) => {
         if (match.retailer.toLowerCase() == 'ebay') {
             return [];
-        } 
-        try {    
+        }
+        try {
             await prisma.retailerProduct.create({
                 data: {
                     price: match.price,
