@@ -30,5 +30,8 @@ function verifySha256Hash(hash: string, key: string, timestamp: string): boolean
     }
     const data = key + timestamp;
     const computedHash = createHash('sha256').update(data).digest('hex');
+
+    console.log(`computed hash`, computedHash);
+    console.log(`received hash`, hash);
     return computedHash === hash;
 }
