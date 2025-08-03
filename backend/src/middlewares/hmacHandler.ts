@@ -25,7 +25,11 @@ function verifySha256Hash(hash: string, key: string, timestamp: string): boolean
 
     console.log(`passed timestamp`, ts);
     console.log(`current timestamp`, now);
-    if (isNaN(ts) || ts < now - 60 * 1000 || ts > now) {
+
+    const tolerance_ms: number = 60 * 1000;
+
+    const timeDifference = Math.abs(now - ts)
+    if (isNaN(ts) || timeDifference > tolerance_ms) {
         return false;
     }
     const data = key + timestamp;
