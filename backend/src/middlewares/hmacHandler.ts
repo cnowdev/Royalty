@@ -23,9 +23,6 @@ function verifySha256Hash(hash: string, key: string, timestamp: string): boolean
     const ts = parseInt(timestamp, 10);
     const now = Math.floor(Date.now());
 
-    console.log(`passed timestamp`, ts);
-    console.log(`current timestamp`, now);
-
     const tolerance_ms: number = 60 * 1000;
 
     const timeDifference = Math.abs(now - ts)
@@ -35,7 +32,5 @@ function verifySha256Hash(hash: string, key: string, timestamp: string): boolean
     const data = key + timestamp;
     const computedHash = createHash('sha256').update(data).digest('hex');
 
-    console.log(`computed hash`, computedHash);
-    console.log(`received hash`, hash);
     return computedHash === hash;
 }
