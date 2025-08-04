@@ -30,7 +30,7 @@ const visitRetailerSite = (url: string) => {
 export default function RetailerProductCard({ retailerProduct, isLight, currentProduct }: RetailerProductCardProps) {
   const { retailerName, price, retailerProductUrl } = retailerProduct as any;
   const priceDifference = currentProduct.price - price;
-  const logo = `${process.env.CEB_API_URL}/assets/logos/${retailerName}.jpeg`;
+  const logo = `${process.env.CLI_CEB_DEV == 'true' ? process.env.CEB_DEV_API_URL : process.env.CEB_PROD_API_URL}/assets/logos/${retailerName}.jpeg`;
   const formattedPrice = Number(price).toFixed(2);
 
   const [logoError, setLogoError] = useState(false);
