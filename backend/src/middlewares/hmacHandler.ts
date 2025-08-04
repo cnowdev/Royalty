@@ -7,8 +7,6 @@ export function hmacHandler(req: Request, res: Response, next: NextFunction) {
         throw new Error("API key is not set");
     }
 
-    console.log('api key: ', apiKey);
-
     const hashedApiKey = req.headers['x-hashed-api-key'] as string;
     const randomString = req.headers['x-random-string'] as string;
 
