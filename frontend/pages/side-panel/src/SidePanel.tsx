@@ -19,6 +19,7 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import RetailerProductCard from './components/RetailerProductCard';
+import { formatPricingData } from './utils';
 
 // Register required Chart.js components
 ChartJS.register(
@@ -64,23 +65,14 @@ const SidePanel = () => {
         setCurrentProduct(retailerProduct);
         setRetailers(relatedProducts);
 
-        // Generate price history data for the chart
-        const pricingData: { createdAt: string; price: string }[] = (await APIClient.getRetailerProductPricingData(retailerProduct.retailerProductId, retailerProduct.retailerName)).map((entry) => ({
-          ...entry,
-          price: entry.price.toString(),
-        }));
-        const priceHistoryData = pricingData.map((entry) => ({
-          date: new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          price: parseFloat(entry.price),
-        }));
+      const pricingData: { createdAt: string; price: string }[] = (await APIClient.getRetailerProductPricingData(retailerProduct.retailerProductId, retailerProduct.retailerName)).map((entry) => ({
+        ...entry,
+        price: entry.price.toString(),
+      }));
 
-        if (priceHistoryData.length > 0) {
-          const lastPrice = priceHistoryData[priceHistoryData.length - 1].price;
-          const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          priceHistoryData.push({ date: today, price: lastPrice });
-        }
+      const priceHistoryData = formatPricingData(pricingData);
 
-        setPriceHistory(priceHistoryData);
+      setPriceHistory(priceHistoryData);
       } catch (err: any) {
         console.error('Error fetching retailers:', err);
         setError("An error occurred while fetching data. Make sure you're on a product page. We also may not support this retailer/product yet.");
@@ -206,13 +198,7 @@ const SidePanel = () => {
               )}
 
             </div>
-            <div className={`grid grid-cols-3 gap-3 text-center`}>
-              <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
-                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Current Price</p>
-                <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
-                  ${Number(currentProduct.price).toFixed(2)}
-                </p>
-              </div>
+            <div className={`grid grid-cols-2 gap-3 text-center`}>
               <div className={`p-3 rounded-lg border shadow-md ${isLight ? 'border-gray-300 bg-white' : 'border-border bg-nav'}`}>
                 <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Lowest Price</p>
                 <p className={`text-lg font-bold text-green-500`}>
@@ -226,6 +212,9 @@ const SidePanel = () => {
                 <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>Highest Price</p>
                 <p className={`text-lg font-bold ${isLight ? 'text-gray-800' : 'text-gray-100'}`}>
                   ${Math.max(...priceHistory.map((entry) => entry.price)).toFixed(2)}
+                </p>
+                <p className={`text-xs ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>
+                  {priceHistory.find((entry) => entry.price === Math.max(...priceHistory.map((e) => e.price)))?.date || ''}
                 </p>
               </div>
             </div>

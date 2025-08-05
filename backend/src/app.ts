@@ -9,14 +9,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(hmacHandler);
 
 app.get('/', (req: any, res: { send: (arg0: string) => void; }) => {
     res.send('Hello, world!!');
 });
 
-app.use('/coupons', couponRoutes);
-app.use('/products', productRoutes);
+app.use('/coupons', hmacHandler, couponRoutes);
+app.use('/products', hmacHandler, productRoutes);
 app.use('/assets', express.static('assets'));
 
 app.use(errorHandler);

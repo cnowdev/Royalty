@@ -176,7 +176,7 @@ export const getRelatedProductsByProductID = async (req: Request, res: Response,
 const priceComAPIURL = 'https://matchos.price.com/apiv2'
 
 /**
- * gets the product by product ID, then refreshes all retailerProducts linked to that product.
+ * gets the product by object ID, then refreshes all retailerProducts linked to that product.
  * 
  * @param productID 
  */
