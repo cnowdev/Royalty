@@ -192,7 +192,7 @@ const SidePanel = () => {
                       <Line data={data} options={options} />
                     ) : (
                       <img
-                        src={`https://charts.camelcamelcamel.com/us/${currentProduct.retailerProductId}/amazon.png?force=1&zero=0&w=100&h=100&desired=false&legend=1&ilt=1&tp=3m&fo=0&lang=en`} // Replace with the actual image URL
+                        src={`https://charts.camelcamelcamel.com/us/${currentProduct.retailerProductId}/amazon-new.png?force=1&zero=0&w=100&h=100&desired=false&legend=1&ilt=1&tp=3m&fo=0&lang=en`}
                         alt="We may not support this product yet"
                         className="w-full h-full object-contain"
                       />
@@ -232,9 +232,11 @@ const SidePanel = () => {
 
             {/* Retailers List */}
             <div>
-              <h3 className={`text-sm font-medium mb-3 ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
-                All Retailers
-              </h3>
+              {retailers.length > 1 && (
+                <h3 className={`text-sm font-medium mb-3 ${isLight ? 'text-gray-800' : 'text-gray-200'}`}>
+                  All Retailers
+                </h3>
+              )}
               <div className="space-y-3">
                 {retailers.map((retailer) => <RetailerProductCard retailerProduct={retailer} isLight={isLight} currentProduct={currentProduct} />)}
               </div>

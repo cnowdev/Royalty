@@ -8,7 +8,14 @@ export const productURLs = [
     "sephora.com/product",
     "jcpenney.com/p",
     "wayfair.com/*/pdp",
-    "walmart.com/ip"
+    "walmart.com/ip",
+    "officedepot.com/a/products",
+    "nike.com/t/",
+    "nordstrom.com/s/",
+    "newegg.com/*/p/",
+    "macys.com/shop/product/",
+    "kohls.com/product/",
+    "dickssportinggoods.com/p/",
 ];
 
 export const autoApplyProductURLs = [
@@ -28,6 +35,8 @@ export function matchesProductURL(url: string): boolean {
         pattern.replace(/\*/g, ".*").replace(/\//g, "\\/"),
         "i"
       );
+      console.log("Testing URL:", url, "against pattern:", pattern, "=>", regex);
+      console.log("Match result:", regex.test(url));
       return regex.test(url);
     });
 }
