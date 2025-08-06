@@ -48,49 +48,81 @@ const SidePanel = () => {
   const [showChart, setShowChart] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchRetailers = async () => {
-      setIsLoading(true);
-      setError(null);
+  let currentTabId: number;
 
-      try {
-        // Replace with the actual product URL or object ID
-        const productURL = await getCurrentTab(); // Use the current URL
+  const fetchRetailers = async () => {
+    setIsLoading(true);
+    setError(null);
 
-        const retailerProduct = await APIClient.getRetailerProduct(productURL);
+    try {
+      const productURL = await getCurrentTab(); // Gets current tab's URL
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      currentTabId = tab.id!;
 
-        // Fetch related products using the object ID
-        const relatedProducts = await APIClient.getRelatedProducts(retailerProduct.product.objectId);
+      const retailerProduct = await APIClient.getRetailerProduct(productURL);
+      const relatedProducts = await APIClient.getRelatedProducts(retailerProduct.product.objectId);
 
-        // Set the current product and related retailers
-        setCurrentProduct(retailerProduct);
-        setRetailers(relatedProducts);
+      setCurrentProduct(retailerProduct);
+      setRetailers(relatedProducts);
 
-      const pricingData: { createdAt: string; price: string }[] = (await APIClient.getRetailerProductPricingData(retailerProduct.retailerProductId, retailerProduct.retailerName)).map((entry) => ({
+      const pricingData: { createdAt: string; price: string }[] = (await APIClient.getRetailerProductPricingData(
+        retailerProduct.retailerProductId,
+        retailerProduct.retailerName
+      )).map((entry) => ({
         ...entry,
         price: entry.price.toString(),
       }));
 
       const priceHistoryData = formatPricingData(pricingData);
-
       setPriceHistory(priceHistoryData);
-      } catch (err: any) {
-        console.error('Error fetching retailers:', err);
-        setError("An error occurred while fetching data. Make sure you're on a product page. We also may not support this retailer/product yet.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    } catch (err: any) {
+      console.error('Error fetching retailers:', err);
+      setError("An error occurred while fetching data. Make sure you're on a product page. We also may not support this retailer/product yet.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchRetailers();
+  const handleTabUpdate = async (tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
+    if (tabId !== currentTabId || !changeInfo.url) return;
 
-    const handleTabUpdate = (tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
-      if (changeInfo.url) {
-        window.close(); // Close the side panel when the URL changes
-      }
-    };
+    setIsLoading(true);
+    setError(null);
 
+    try {
+      const productURL = changeInfo.url;
+      const retailerProduct = await APIClient.getRetailerProduct(productURL);
+      const relatedProducts = await APIClient.getRelatedProducts(retailerProduct.product.objectId);
+
+      setCurrentProduct(retailerProduct);
+      setRetailers(relatedProducts);
+
+      const pricingData: { createdAt: string; price: string }[] = (await APIClient.getRetailerProductPricingData(
+        retailerProduct.retailerProductId,
+        retailerProduct.retailerName
+      )).map((entry) => ({
+        ...entry,
+        price: entry.price.toString(),
+      }));
+
+      const priceHistoryData = formatPricingData(pricingData);
+      setPriceHistory(priceHistoryData);
+    } catch (err: any) {
+      window.close();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchRetailers().then(() => {
     chrome.tabs.onUpdated.addListener(handleTabUpdate);
-  }, []);
+  });
+
+  return () => {
+    chrome.tabs.onUpdated.removeListener(handleTabUpdate);
+  };
+}, []);
+
 
 
   const data = {

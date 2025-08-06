@@ -42,7 +42,7 @@ const manifest = {
   version: packageJson.version,
   description: '__MSG_extensionDescription__',
   host_permissions: checkoutUrls,
-  permissions: ['storage', 'scripting', 'sidePanel', 'tabs'],
+  permissions: ['storage', 'scripting', 'sidePanel', 'activeTab'],
   background: {
     service_worker: 'background.js',
     type: 'module',
