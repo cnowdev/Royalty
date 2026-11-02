@@ -10,7 +10,7 @@ Royalty is a browser extension that saves you money on the products you love. Ro
 <div>
   <img src="assets/royaltyimage1.png" width="300" alt="Feature Screenshot 1" />
   <img src="assets/royaltyimage2.png" width="300" alt="Feature Screenshot 2" />
-  <img src="assets/3royaltyimage3.png" width="300" alt="Feature Screenshot 3" />
+  <img src="assets/royaltyimage3.png" width="300" alt="Feature Screenshot 3" />
 </div>
 
 ---
